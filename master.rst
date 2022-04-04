@@ -4,7 +4,8 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
-   2022/03/31/picoctf_basic_file_exploit
+   2022/04/04/picoctf_sqli_lite
+   2022/04/04/picoctf_basic_file_exploit
    2022/03/28/hello_world
    pages/about
    pages/ctf_writeups
