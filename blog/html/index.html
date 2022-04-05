@@ -80,142 +80,23 @@
         <div class="section">
             <h1><a href="2022/04/06/local_authority.html">picoCTF: Local Authority</a></h1>
 <p>Another challenge form picoCTF 2022 worth 100 points:</p>
-<blockquote>
-<div><p><strong>Description:</strong></p>
-<p>Can you get the flag? Go to this <a class="reference external" href="http://saturn.picoctf.net:52194/">website</a>
-and see what you can discover.</p>
-<p><strong>Hint:</strong></p>
-<p>How is the password checked on this website?</p>
-</div></blockquote>
-<p><strong>Solution:</strong></p>
-<p>When you go to the website, you find the following login screen:</p>
-<a class="reference internal image-reference" href="_images/local_authority_1.png"><img alt="../../../_images/local_authority_1.png" src="_images/local_authority_1.png" style="width: 527.0px; height: 225.0px;"/></a>
-<p>To find out more about the inner workings of the website, we look at the source
-code (right-click on the page) and find the following:</p>
-<div class="code html highlight-default notranslate"><div class="highlight"><pre><span/>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
-    &lt;title&gt;Secure Customer Portal&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-    &lt;h1&gt;Secure Customer Portal&lt;/h1&gt;
-
-&lt;p&gt;Only letters and numbers allowed for username and password.&lt;/p&gt;
-
-    &lt;form role="form" action="login.php" method="post"&gt;
-    &lt;input type="text" name="username" placeholder="Username" required
-    autofocus&gt;&lt;/br&gt;
-    &lt;input type="password" name="password" placeholder="Password" required&gt;
-    &lt;button type="submit" name="login"&gt;Login&lt;/button&gt;
-    &lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</pre></div>
-</div>
-<p>Nothing visible at first sight. We dive deeper and look at the files
-<span class="docutils literal"><span class="pre">style.css</span></span> and <span class="docutils literal"><span class="pre">login.php</span></span>. There is nothing special in <span class="docutils literal"><span class="pre">style.css</span></span>, so
-we focus on <span class="docutils literal"><span class="pre">login.php</span></span>:</p>
-<div class="code javascript highlight-default notranslate"><div class="highlight"><pre><span/>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
-&lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
-    &lt;title&gt;Login Page&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;script src="secure.js"&gt;&lt;/script&gt;
-
-    &lt;p id='msg'&gt;&lt;/p&gt;
-
-    &lt;form hidden action="admin.php" method="post" id="hiddenAdminForm"&gt;
-    &lt;input type="text" name="hash" required id="adminFormHash"&gt;
-    &lt;/form&gt;
-
-    &lt;script type="text/javascript"&gt;
-    function filter(string) {
-        filterPassed = true;
-        for (let i =0; i &lt; string.length; i++){
-        cc = string.charCodeAt(i);
-
-        if ( (cc &gt;= 48 &amp;&amp; cc &lt;= 57) ||
-            (cc &gt;= 65 &amp;&amp; cc &lt;= 90) ||
-            (cc &gt;= 97 &amp;&amp; cc &lt;= 122) )
-        {
-            filterPassed = true;
-        }
-        else
-        {
-            return false;
-        }
-        }
-
-        return true;
-    }
-
-    window.username = "";
-    window.password = "";
-
-    usernameFilterPassed = filter(window.username);
-    passwordFilterPassed = filter(window.password);
-
-    if ( usernameFilterPassed &amp;&amp; passwordFilterPassed ) {
-
-        loggedIn = checkPassword(window.username, window.password);
-
-        if(loggedIn)
-        {
-        document.getElementById('msg').innerHTML = "Log In Successful";
-        document.getElementById('adminFormHash').value = "2196812e91c29df34f5e217cfd639881";
-        document.getElementById('hiddenAdminForm').submit();
-        }
-        else
-        {
-        document.getElementById('msg').innerHTML = "Log In Failed";
-        }
-    }
-    else {
-        document.getElementById('msg').innerHTML = "Illegal character in username or password."
-    }
-    &lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</pre></div>
-</div>
-<p>Three further files are referenced in this document: <span class="docutils literal"><span class="pre">style.css</span></span>,
-<span class="docutils literal"><span class="pre">admin.php</span></span> and <span class="docutils literal"><span class="pre">secure.js</span></span>, and there is some JavaScript code included in
-the website directly (starting in line 19 with <span class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type="text/javascript"&gt;</span></span>.</p>
-<p>The function <span class="docutils literal"><span class="pre">filter</span></span> obviously checks if the entered field contains only
-allowed letters. The JavaScript code following the function definition reads
-the entered values and passes them on to a function called <span class="docutils literal"><span class="pre">checkPassword()</span></span>
-which is not defined in this document. Since we are looking for JavaScript
-code, we look into <span class="docutils literal"><span class="pre">secure.js</span></span> first and find the following:</p>
-<div class="code javascript highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">function</span> <span class="n">checkPassword</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">username</span> <span class="o">===</span> <span class="s1">'admin'</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">===</span> <span class="s1">'strongPassword098765'</span> <span class="p">)</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">return</span> <span class="n">false</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-<p>Okay, that was not difficult. The login credentials for the website are</p>
-<p><span class="docutils literal"><span class="pre">username:</span> <span class="pre">admin</span></span></p>
-<p><span class="docutils literal"><span class="pre">password:</span> <span class="pre">'strongPassword098765'</span></span></p>
-<p>If we copy the password, go back to the login screen, enter the password
-together with the username <span class="docutils literal"><span class="pre">admin</span></span>, we get the flag:</p>
-<p><span class="docutils literal"><span class="pre">picoCTF{j5_15_7r4n5p4r3n7_6309e949}</span></span></p>
+<p class="readmorewrapper"><a class="readmore" href="2022/04/06/local_authority.html#more">Weiter lesen...</a></p> 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
 
         </div>
         <div class="postmeta">

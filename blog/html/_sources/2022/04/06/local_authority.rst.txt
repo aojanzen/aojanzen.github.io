@@ -3,6 +3,11 @@ picoCTF: Local Authority
 
 Another challenge form picoCTF 2022 worth 100 points:
 
+.. more::
+
+This was an easy exercise where you just had to browse the source code of the
+web site to find the solution. No googleing, no trying.
+
     **Description:**
 
     Can you get the flag? Go to this `website <http://saturn.picoctf.net:52194/>`_
