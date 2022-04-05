@@ -15,29 +15,29 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
         <meta name="viewport" content="width=device-width">
-        <title>Home &mdash; From Noob to Hacker</title>
-            <link rel="stylesheet" href="_static/normalize.css" type="text/css">
-            <link rel="stylesheet" href="_static/sphinx.css" type="text/css">
-            <link rel="stylesheet" href="_static/main.css" type="text/css">
-            <link rel="stylesheet" href="_static/flat.css" type="text/css">
-            <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-            <link rel="stylesheet" href="_static/font-awesome.min.css" type="text/css">
-        <link rel="shortcut icon" href="_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
-        <script src="_static/vendor/modernizr-2.6.2.min.js"></script>
+        <title>picoCTF: Local Authority &mdash; From Noob to Hacker</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-        <script>window.jQuery || document.write('<script src="_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
-        <script src="_static/plugins.js"></script>
-        <script src="_static/main.js"></script>
-        <link rel="search" title="Search" href="search.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="rss.html" /><script type="text/javascript">
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="picoCTF: SQLiLite" href="../04/picoctf_sqli_lite.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
+        URL_ROOT:    '../../../',
         VERSION:     '1.7.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         SOURCELINK_SUFFIX: '.txt',
         HAS_SOURCE:  true
       };
-    </script><script type="text/javascript" src="_static/underscore.js"></script><script type="text/javascript" src="_static/doctools.js"></script>
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -55,30 +55,30 @@
 
       <div id="container"><header role="banner">
             <hgroup>
-              <h1><a href="#">From Noob to Hacker</a></h1><h2>A blog about things I have learned along the way</h2></hgroup>
+              <h1><a href="../../../index.html">From Noob to Hacker</a></h1><h2>A blog about things I have learned along the way</h2></hgroup>
           </header>
       <nav role="navigation">
             <ul><li class="main-nav">
-                  <a href="#">Home</a>
+                  <a href="../../../index.html">Home</a>
                 </li>
               <li class="main-nav">
-                  <a href="pages/about.html">About</a>
+                  <a href="../../../pages/about.html">About</a>
                 </li>
               <li class="main-nav">
-                  <a href="pages/ctf_writeups.html">CTF Writeups</a>
+                  <a href="../../../pages/ctf_writeups.html">CTF Writeups</a>
                 </li>
               <li class="main-nav">
-                  <a href="pages/linux_and_tools.html">Linux and Tools</a>
+                  <a href="../../../pages/linux_and_tools.html">Linux and Tools</a>
                 </li>
               <li class="main-nav">
-                  <a href="pages/hacking.html">Hacking and Networks</a>
+                  <a href="../../../pages/hacking.html">Hacking and Networks</a>
                 </li>
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
             <span>April 06, 2022</span>
         </div>
-        <div class="section">
-            <h1><a href="2022/04/06/local_authority.html">picoCTF: Local Authority</a></h1>
+    <div class="section" id="picoctf-local-authority">
+<h1>picoCTF: Local Authority</h1>
 <p>Another challenge form picoCTF 2022 worth 100 points:</p>
 <blockquote>
 <div><p><strong>Description:</strong></p>
@@ -89,16 +89,16 @@ and see what you can discover.</p>
 </div></blockquote>
 <p><strong>Solution:</strong></p>
 <p>When you go to the website, you find the following login screen:</p>
-<a class="reference internal image-reference" href="_images/local_authority_1.png"><img alt="../../../_images/local_authority_1.png" src="_images/local_authority_1.png" style="width: 527.0px; height: 225.0px;"/></a>
+<a class="reference internal image-reference" href="../../../_images/local_authority_1.png"><img alt="../../../_images/local_authority_1.png" src="../../../_images/local_authority_1.png" style="width: 527.0px; height: 225.0px;" /></a>
 <p>To find out more about the inner workings of the website, we look at the source
 code (right-click on the page) and find the following:</p>
-<div class="code html highlight-default notranslate"><div class="highlight"><pre><span/>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
+<div class="code html highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
     &lt;title&gt;Secure Customer Portal&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -107,11 +107,11 @@ code (right-click on the page) and find the following:</p>
 
 &lt;p&gt;Only letters and numbers allowed for username and password.&lt;/p&gt;
 
-    &lt;form role="form" action="login.php" method="post"&gt;
-    &lt;input type="text" name="username" placeholder="Username" required
+    &lt;form role=&quot;form&quot; action=&quot;login.php&quot; method=&quot;post&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;username&quot; placeholder=&quot;Username&quot; required
     autofocus&gt;&lt;/br&gt;
-    &lt;input type="password" name="password" placeholder="Password" required&gt;
-    &lt;button type="submit" name="login"&gt;Login&lt;/button&gt;
+    &lt;input type=&quot;password&quot; name=&quot;password&quot; placeholder=&quot;Password&quot; required&gt;
+    &lt;button type=&quot;submit&quot; name=&quot;login&quot;&gt;Login&lt;/button&gt;
     &lt;/form&gt;
 &lt;/body&gt;
 &lt;/html&gt;
@@ -120,25 +120,25 @@ code (right-click on the page) and find the following:</p>
 <p>Nothing visible at first sight. We dive deeper and look at the files
 <span class="docutils literal"><span class="pre">style.css</span></span> and <span class="docutils literal"><span class="pre">login.php</span></span>. There is nothing special in <span class="docutils literal"><span class="pre">style.css</span></span>, so
 we focus on <span class="docutils literal"><span class="pre">login.php</span></span>:</p>
-<div class="code javascript highlight-default notranslate"><div class="highlight"><pre><span/>&lt;!DOCTYPE html&gt;
-&lt;html lang="en"&gt;
+<div class="code javascript highlight-default notranslate"><div class="highlight"><pre><span></span>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
-    &lt;meta charset="UTF-8"&gt;
-    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
-    &lt;meta http-equiv="X-UA-Compatible" content="ie=edge"&gt;
-    &lt;link rel="stylesheet" href="style.css"&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;ie=edge&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;
     &lt;title&gt;Login Page&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
-    &lt;script src="secure.js"&gt;&lt;/script&gt;
+    &lt;script src=&quot;secure.js&quot;&gt;&lt;/script&gt;
 
-    &lt;p id='msg'&gt;&lt;/p&gt;
+    &lt;p id=&#39;msg&#39;&gt;&lt;/p&gt;
 
-    &lt;form hidden action="admin.php" method="post" id="hiddenAdminForm"&gt;
-    &lt;input type="text" name="hash" required id="adminFormHash"&gt;
+    &lt;form hidden action=&quot;admin.php&quot; method=&quot;post&quot; id=&quot;hiddenAdminForm&quot;&gt;
+    &lt;input type=&quot;text&quot; name=&quot;hash&quot; required id=&quot;adminFormHash&quot;&gt;
     &lt;/form&gt;
 
-    &lt;script type="text/javascript"&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
     function filter(string) {
         filterPassed = true;
         for (let i =0; i &lt; string.length; i++){
@@ -159,8 +159,8 @@ we focus on <span class="docutils literal"><span class="pre">login.php</span></s
         return true;
     }
 
-    window.username = "";
-    window.password = "";
+    window.username = &quot;&quot;;
+    window.password = &quot;&quot;;
 
     usernameFilterPassed = filter(window.username);
     passwordFilterPassed = filter(window.password);
@@ -171,17 +171,17 @@ we focus on <span class="docutils literal"><span class="pre">login.php</span></s
 
         if(loggedIn)
         {
-        document.getElementById('msg').innerHTML = "Log In Successful";
-        document.getElementById('adminFormHash').value = "2196812e91c29df34f5e217cfd639881";
-        document.getElementById('hiddenAdminForm').submit();
+        document.getElementById(&#39;msg&#39;).innerHTML = &quot;Log In Successful&quot;;
+        document.getElementById(&#39;adminFormHash&#39;).value = &quot;2196812e91c29df34f5e217cfd639881&quot;;
+        document.getElementById(&#39;hiddenAdminForm&#39;).submit();
         }
         else
         {
-        document.getElementById('msg').innerHTML = "Log In Failed";
+        document.getElementById(&#39;msg&#39;).innerHTML = &quot;Log In Failed&quot;;
         }
     }
     else {
-        document.getElementById('msg').innerHTML = "Illegal character in username or password."
+        document.getElementById(&#39;msg&#39;).innerHTML = &quot;Illegal character in username or password.&quot;
     }
     &lt;/script&gt;
 
@@ -191,15 +191,15 @@ we focus on <span class="docutils literal"><span class="pre">login.php</span></s
 </div>
 <p>Three further files are referenced in this document: <span class="docutils literal"><span class="pre">style.css</span></span>,
 <span class="docutils literal"><span class="pre">admin.php</span></span> and <span class="docutils literal"><span class="pre">secure.js</span></span>, and there is some JavaScript code included in
-the website directly (starting in line 19 with <span class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type="text/javascript"&gt;</span></span>.</p>
+the website directly (starting in line 19 with <span class="docutils literal"><span class="pre">&lt;script</span> <span class="pre">type=&quot;text/javascript&quot;&gt;</span></span>.</p>
 <p>The function <span class="docutils literal"><span class="pre">filter</span></span> obviously checks if the entered field contains only
 allowed letters. The JavaScript code following the function definition reads
 the entered values and passes them on to a function called <span class="docutils literal"><span class="pre">checkPassword()</span></span>
 which is not defined in this document. Since we are looking for JavaScript
 code, we look into <span class="docutils literal"><span class="pre">secure.js</span></span> first and find the following:</p>
-<div class="code javascript highlight-default notranslate"><div class="highlight"><pre><span/><span class="n">function</span> <span class="n">checkPassword</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+<div class="code javascript highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">function</span> <span class="n">checkPassword</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
 <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span> <span class="n">username</span> <span class="o">===</span> <span class="s1">'admin'</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">===</span> <span class="s1">'strongPassword098765'</span> <span class="p">)</span>
+    <span class="k">if</span><span class="p">(</span> <span class="n">username</span> <span class="o">===</span> <span class="s1">&#39;admin&#39;</span> <span class="o">&amp;&amp;</span> <span class="n">password</span> <span class="o">===</span> <span class="s1">&#39;strongPassword098765&#39;</span> <span class="p">)</span>
     <span class="p">{</span>
         <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
     <span class="p">}</span>
@@ -216,116 +216,32 @@ code, we look into <span class="docutils literal"><span class="pre">secure.js</s
 <p>If we copy the password, go back to the login screen, enter the password
 together with the username <span class="docutils literal"><span class="pre">admin</span></span>, we get the flag:</p>
 <p><span class="docutils literal"><span class="pre">picoCTF{j5_15_7r4n5p4r3n7_6309e949}</span></span></p>
+</div>
 
-        </div>
-        <div class="postmeta">
+    <div class="postmeta">
         <div class="author">
             <span>Von Andreas Janzen</span>
         </div>
         
         
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>April 04, 2022</span>
-        </div>
-        <div class="section">
-            <h1><a href="2022/04/04/picoctf_sqli_lite.html">picoCTF: SQLiLite</a></h1>
-<p>The following challenge was part of the picoCTF 2022 contest, a SQL injection,
-worth 300 points:</p>
-<p class="readmorewrapper"><a class="readmore" href="2022/04/04/picoctf_sqli_lite.html#more">Weiter lesen...</a></p> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Von Andreas Janzen</span>
-        </div>
-        
-        
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>April 04, 2022</span>
-        </div>
-        <div class="section">
-            <h1><a href="2022/04/04/picoctf_basic_file_exploit.html">picoCTF: basic-file-exploit</a></h1>
-<p>This is my first writeup about a CTF challenge. The following was the first
-task in the 100’s (i.e. lowest) category of the 2022 picoCTF challenge:</p>
-<p class="readmorewrapper"><a class="readmore" href="2022/04/04/picoctf_basic_file_exploit.html#more">Weiter lesen...</a></p> 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Von Andreas Janzen</span>
-        </div>
-        
-        
-        </div><div class="separator post_separator"></div><div class="timestamp postmeta">
-            <span>March 28, 2022</span>
-        </div>
-        <div class="section">
-            <h1><a href="2022/03/28/hello_world.html">Hello World!</a></h1>
-<p>Hi! My name is Andreas, I am from Germany. Let me share a few words about what
-happened so far…</p>
-<p class="readmorewrapper"><a class="readmore" href="2022/03/28/hello_world.html#more">Weiter lesen...</a></p> 
- 
- 
- 
- 
- 
- 
- 
-
-        </div>
-        <div class="postmeta">
-        <div class="author">
-            <span>Von Andreas Janzen</span>
-        </div>
-        
-        
-        </div><div class="archive_link">
-        <a href="archive.html"> &mdash; Archiv &mdash; </a>
-    </div></article><aside class="sidebar"><section><div class="widget">
+        </div><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="../04/picoctf_sqli_lite.html">picoCTF: SQLiLite</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Aktuell</h1>
     <ul><li>
-            <a href="2022/04/06/local_authority.html">picoCTF: Local Authority</a>
+            <a href="#">picoCTF: Local Authority</a>
         </li><li>
-            <a href="2022/04/04/picoctf_sqli_lite.html">picoCTF: SQLiLite</a>
+            <a href="../04/picoctf_sqli_lite.html">picoCTF: SQLiLite</a>
         </li><li>
-            <a href="2022/04/04/picoctf_basic_file_exploit.html">picoCTF: basic-file-exploit</a>
+            <a href="../04/picoctf_basic_file_exploit.html">picoCTF: basic-file-exploit</a>
         </li><li>
-            <a href="2022/03/28/hello_world.html">Hello World!</a>
+            <a href="../../03/28/hello_world.html">Hello World!</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">
     <h1><a href="#searchbox">Search</a></h1>
-    <form action="search.html" method="get">
+    <form action="../../../search.html" method="get">
         <input type="text" name="q" />
         <button type="submit"><span class="fa fa-search"></span></button>
     </form>
