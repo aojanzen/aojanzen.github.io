@@ -13,7 +13,7 @@ import tinkerer.paths
 project = 'From Noob to Hacker'
 
 # Change this to the tagline of your blog
-tagline = 'A blog about things I have learned along the way'
+tagline = 'Things I have learned along the way'
 
 # Change this to the description of your blog
 description = 'Hacking how-to for beginners, learnings from CTFs, note for myself'
