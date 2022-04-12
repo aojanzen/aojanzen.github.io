@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/04/12/fresh_java
    2022/04/06/unpackme_py
    2022/04/06/local_authority
    2022/04/04/picoctf_sqli_lite
