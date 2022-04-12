@@ -1,5 +1,5 @@
-Fresh Java
-==========
+picoCTF: Fresh Java
+===================
 
 Another CTF challenge from picoCTF 2022 for 200 points.
 
