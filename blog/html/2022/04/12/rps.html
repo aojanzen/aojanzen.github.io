@@ -1,0 +1,318 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
+        <meta name="viewport" content="width=device-width">
+        <title>picoCTF: RPS &mdash; From Noob to Hacker</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="picoCTF: Fresh Java" href="fresh_java.html" /><link rel="prev" title="Introduction to Linux" href="../../05/21/introductiontolinux.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">From Noob to Hacker</a></h1><h2>Things I have learned along the way</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../index.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/about.html">About</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/ctf_writeups.html">CTF Writeups</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/linux_and_tools.html">Linux and Tools</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/hacking.html">Hacking and Networks</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>April 12, 2022</span>
+        </div>
+    <div class="section" id="picoctf-rps">
+<h1>picoCTF: RPS</h1>
+<p>Another challenge from picoCTF 2022, worth 200 points.</p>
+<div id="more"> </div><p>The following challenge is to read a piece of C source code to figure out how
+to manipulate a game in our favour so that we do not have to play endless games
+of rock, paper, scissors:</p>
+<blockquote>
+<div><p><strong>Description:</strong></p>
+<p>Here’s a program that plays rock, paper, scissors against you. I hear something
+good happens if you win 5 times in a row. Connect to the program with netcat:</p>
+<p><span class="docutils literal"><span class="pre">$</span> <span class="pre">nc</span> <span class="pre">saturn.picoctf.net</span> <span class="pre">56981</span></span></p>
+<p>The program’s source code with the flag redacted can be downloaded
+<a class="reference external" href="https://artifacts.picoctf.net/c/444/game-redacted.c">here</a>.</p>
+<p><strong>Hint:</strong> How does the program check if you won?</p>
+</div></blockquote>
+<p><strong>Solution:</strong></p>
+<p>The following source code has to be analysed:</p>
+<div class="code C highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;stdio.h&gt;</span>
+<span class="c1">#include &lt;stdlib.h&gt;</span>
+<span class="c1">#include &lt;stdbool.h&gt;</span>
+<span class="c1">#include &lt;string.h&gt;</span>
+<span class="c1">#include &lt;time.h&gt;</span>
+<span class="c1">#include &lt;unistd.h&gt;</span>
+<span class="c1">#include &lt;sys/time.h&gt;</span>
+<span class="c1">#include &lt;sys/types.h&gt;</span>
+
+
+<span class="c1">#define WAIT 60</span>
+
+
+
+<span class="n">static</span> <span class="n">const</span> <span class="n">char</span><span class="o">*</span> <span class="n">flag</span> <span class="o">=</span> <span class="s2">&quot;[REDACTED]&quot;</span><span class="p">;</span>
+
+<span class="n">char</span><span class="o">*</span> <span class="n">hands</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;rock&quot;</span><span class="p">,</span> <span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="s2">&quot;scissors&quot;</span><span class="p">};</span>
+<span class="n">char</span><span class="o">*</span> <span class="n">loses</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;paper&quot;</span><span class="p">,</span> <span class="s2">&quot;scissors&quot;</span><span class="p">,</span> <span class="s2">&quot;rock&quot;</span><span class="p">};</span>
+<span class="nb">int</span> <span class="n">wins</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+
+
+<span class="nb">int</span> <span class="n">tgetinput</span><span class="p">(</span><span class="n">char</span> <span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="n">unsigned</span> <span class="nb">int</span> <span class="n">l</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fd_set</span>          <span class="n">input_set</span><span class="p">;</span>
+    <span class="n">struct</span> <span class="n">timeval</span>  <span class="n">timeout</span><span class="p">;</span>
+    <span class="nb">int</span>             <span class="n">ready_for_reading</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nb">int</span>             <span class="n">read_bytes</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">if</span><span class="p">(</span> <span class="n">l</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="p">)</span>
+    <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;&#39;l&#39; for tgetinput must be greater than 0</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">2</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="o">/*</span> <span class="n">Empty</span> <span class="n">the</span> <span class="n">FD</span> <span class="n">Set</span> <span class="o">*/</span>
+    <span class="n">FD_ZERO</span><span class="p">(</span><span class="o">&amp;</span><span class="n">input_set</span> <span class="p">);</span>
+    <span class="o">/*</span> <span class="n">Listen</span> <span class="n">to</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">descriptor</span> <span class="o">*/</span>
+    <span class="n">FD_SET</span><span class="p">(</span><span class="n">STDIN_FILENO</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">input_set</span><span class="p">);</span>
+
+    <span class="o">/*</span> <span class="n">Waiting</span> <span class="k">for</span> <span class="n">some</span> <span class="n">seconds</span> <span class="o">*/</span>
+    <span class="n">timeout</span><span class="o">.</span><span class="n">tv_sec</span> <span class="o">=</span> <span class="n">WAIT</span><span class="p">;</span>    <span class="o">//</span> <span class="n">WAIT</span> <span class="n">seconds</span>
+    <span class="n">timeout</span><span class="o">.</span><span class="n">tv_usec</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>    <span class="o">//</span> <span class="mi">0</span> <span class="n">milliseconds</span>
+
+    <span class="o">/*</span> <span class="n">Listening</span> <span class="k">for</span> <span class="nb">input</span> <span class="n">stream</span> <span class="k">for</span> <span class="nb">any</span> <span class="n">activity</span> <span class="o">*/</span>
+    <span class="n">ready_for_reading</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">input_set</span><span class="p">,</span> <span class="n">NULL</span><span class="p">,</span> <span class="n">NULL</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">timeout</span><span class="p">);</span>
+    <span class="o">/*</span> <span class="n">Here</span><span class="p">,</span> <span class="n">first</span> <span class="n">parameter</span> <span class="ow">is</span> <span class="n">number</span> <span class="n">of</span> <span class="n">FDs</span> <span class="ow">in</span> <span class="n">the</span> <span class="nb">set</span><span class="p">,</span>
+    <span class="o">*</span> <span class="n">second</span> <span class="ow">is</span> <span class="n">our</span> <span class="n">FD</span> <span class="nb">set</span> <span class="k">for</span> <span class="n">reading</span><span class="p">,</span>
+    <span class="o">*</span> <span class="n">third</span> <span class="ow">is</span> <span class="n">the</span> <span class="n">FD</span> <span class="nb">set</span> <span class="ow">in</span> <span class="n">which</span> <span class="nb">any</span> <span class="n">write</span> <span class="n">activity</span> <span class="n">needs</span> <span class="n">to</span> <span class="n">updated</span><span class="p">,</span>
+    <span class="o">*</span> <span class="n">which</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">required</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">case</span><span class="o">.</span>
+    <span class="o">*</span> <span class="n">Fourth</span> <span class="ow">is</span> <span class="n">timeout</span>
+    <span class="o">*/</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ready_for_reading</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="o">/*</span> <span class="n">Some</span> <span class="n">error</span> <span class="n">has</span> <span class="n">occured</span> <span class="ow">in</span> <span class="nb">input</span> <span class="o">*/</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Unable to read your input</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">ready_for_reading</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">read_bytes</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">l</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">input</span><span class="p">[</span><span class="n">read_bytes</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">){</span>
+        <span class="o">--</span><span class="n">read_bytes</span><span class="p">;</span>
+        <span class="nb">input</span><span class="p">[</span><span class="n">read_bytes</span><span class="p">]</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\0</span><span class="s1">&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">if</span><span class="p">(</span><span class="n">read_bytes</span><span class="o">==</span><span class="mi">0</span><span class="p">){</span>
+            <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;No data given.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">4</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Timed out waiting for user input. Press Ctrl-C to disconnect</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">3</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+
+<span class="nb">bool</span> <span class="n">play</span> <span class="p">()</span> <span class="p">{</span>
+<span class="n">char</span> <span class="n">player_turn</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
+<span class="n">srand</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span>
+<span class="nb">int</span> <span class="n">r</span><span class="p">;</span>
+
+<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Please make your selection (rock/paper/scissors):</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">tgetinput</span><span class="p">(</span><span class="n">player_turn</span><span class="p">,</span> <span class="mi">100</span><span class="p">);</span>
+<span class="o">//</span> <span class="n">Timeout</span> <span class="n">on</span> <span class="n">user</span> <span class="nb">input</span>
+<span class="k">if</span><span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Goodbye!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="nb">int</span> <span class="n">computer_turn</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;You played: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">player_turn</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;The computer played: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">hands</span><span class="p">[</span><span class="n">computer_turn</span><span class="p">]);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">strstr</span><span class="p">(</span><span class="n">player_turn</span><span class="p">,</span> <span class="n">loses</span><span class="p">[</span><span class="n">computer_turn</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;You win! Play again?&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Seems like you didn&#39;t win this time. Play again?&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">false</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="p">}</span>
+
+
+<span class="nb">int</span> <span class="n">main</span> <span class="p">()</span> <span class="p">{</span>
+<span class="n">char</span> <span class="nb">input</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;</span><span class="se">\0</span><span class="s1">&#39;</span><span class="p">};</span>
+<span class="nb">int</span> <span class="n">command</span><span class="p">;</span>
+<span class="nb">int</span> <span class="n">r</span><span class="p">;</span>
+
+<span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Welcome challenger to the game of Rock, Paper, Scissors&quot;</span><span class="p">);</span>
+<span class="n">puts</span><span class="p">(</span><span class="s2">&quot;For anyone that beats me 5 times in a row, I will offer up a flag I found&quot;</span><span class="p">);</span>
+<span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Are you ready?&quot;</span><span class="p">);</span>
+
+<span class="k">while</span> <span class="p">(</span><span class="n">true</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Type &#39;1&#39; to play a game&quot;</span><span class="p">);</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Type &#39;2&#39; to exit the program&quot;</span><span class="p">);</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">tgetinput</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="o">//</span> <span class="n">Timeout</span> <span class="n">on</span> <span class="n">user</span> <span class="nb">input</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">r</span> <span class="o">==</span> <span class="o">-</span><span class="mi">3</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;Goodbye!</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">command</span> <span class="o">=</span> <span class="n">strtol</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">NULL</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Please put in a valid number&quot;</span><span class="p">);</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">command</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">play</span><span class="p">())</span> <span class="p">{</span>
+        <span class="n">wins</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="n">wins</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">wins</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Congrats, here&#39;s the flag!&quot;</span><span class="p">);</span>
+        <span class="n">puts</span><span class="p">(</span><span class="n">flag</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="n">command</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Please type either 1 or 2&quot;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The critical part is the following:</p>
+<div class="code C highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">int</span> <span class="n">computer_turn</span> <span class="o">=</span> <span class="n">rand</span><span class="p">()</span> <span class="o">%</span> <span class="mi">3</span><span class="p">;</span>
+<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;You played: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">player_turn</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s2">&quot;The computer played: </span><span class="si">%s</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">hands</span><span class="p">[</span><span class="n">computer_turn</span><span class="p">]);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="n">strstr</span><span class="p">(</span><span class="n">player_turn</span><span class="p">,</span> <span class="n">loses</span><span class="p">[</span><span class="n">computer_turn</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;You win! Play again?&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">true</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">puts</span><span class="p">(</span><span class="s2">&quot;Seems like you didn&#39;t win this time. Play again?&quot;</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">false</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The point here is that the way the C library function <span class="docutils literal"><span class="pre">strstr()</span></span> is used here
+allows the human player to apply a trick.</p>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Von Andreas Janzen</span>
+        </div>
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../../05/21/introductiontolinux.html">Introduction to Linux</a></li>
+            <li class="right"><a href="fresh_java.html">picoCTF: Fresh Java</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Aktuell</h1>
+    <ul><li>
+            <a href="../../05/21/takingnotes.html">Taking Notes</a>
+        </li><li>
+            <a href="../../05/21/networkingrefresher.html">Networking Refresher</a>
+        </li><li>
+            <a href="../../05/21/introductiontolinux.html">Introduction to Linux</a>
+        </li><li>
+            <a href="#">picoCTF: RPS</a>
+        </li><li>
+            <a href="fresh_java.html">picoCTF: Fresh Java</a>
+        </li><li>
+            <a href="../06/unpackme_py.html">picoCTF: unpackme.py</a>
+        </li><li>
+            <a href="../06/local_authority.html">picoCTF: Local Authority</a>
+        </li><li>
+            <a href="../04/picoctf_sqli_lite.html">picoCTF: SQLiLite</a>
+        </li><li>
+            <a href="../04/picoctf_basic_file_exploit.html">picoCTF: basic-file-exploit</a>
+        </li><li>
+            <a href="../../03/28/hello_world.html">Hello World!</a>
+        </li></ul>
+</div>
+</section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2022, Andreas Janzen. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

@@ -4,6 +4,10 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/05/21/takingnotes
+   2022/05/21/networkingrefresher
+   2022/05/21/introductiontolinux
+   2022/04/12/rps
    2022/04/12/fresh_java
    2022/04/06/unpackme_py
    2022/04/06/local_authority

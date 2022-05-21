@@ -1,0 +1,312 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
+        <meta name="viewport" content="width=device-width">
+        <title>Networking Refresher &mdash; From Noob to Hacker</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Introduction to Linux" href="introductiontolinux.html" /><link rel="prev" title="Taking Notes" href="takingnotes.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">From Noob to Hacker</a></h1><h2>Things I have learned along the way</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../index.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/about.html">About</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/ctf_writeups.html">CTF Writeups</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/linux_and_tools.html">Linux and Tools</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/hacking.html">Hacking and Networks</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>May 21, 2022</span>
+        </div>
+    <div class="section" id="networking-refresher">
+<h1>Networking Refresher</h1>
+<p>The following notes are based on TCM Security’s ‘Practical Ethical Hacking’.
+They provide a short refresher of the most important concepts of networks.</p>
+<div id="more"> </div><div class="section" id="ip-adresses">
+<h2>IP Adresses</h2>
+<p>In Kali Linux <span class="docutils literal"><span class="pre">ifconfig</span></span> (Windows: <span class="docutils literal"><span class="pre">ipconfig</span></span>), displays the settings of the
+installed network adapters. <span class="docutils literal"><span class="pre">inet</span></span> shows the IPv4 address (used most frequently
+today) in decimal format: 32 bits, separated into 4 bytes with 8 bits each, and
+an <span class="docutils literal"><span class="pre">inet6</span></span> shows the IPv6 address using hexadecimal notation.</p>
+<p>IPv4 with 32 bits offers 2**32 addresses in total, i.e. about 4.3 billion.
+These addresses have all been used up for many years, therefore IPv6 was
+invented, where the IPv6 addresses have 128 bits, which allows up to about
+3.4E38 IP addresses. Nevertheless, everyone is still using IPv4 until today.</p>
+<p>Network Address Translation (NAT) is the solution to address all network
+devices with the help of <strong>private</strong> IP addresses. IP addresses that start with
+10.x.x.x (class A, 16.6 Mio. IP addresses per subnet) or 192.168.x.x (class C,
+255 IP addresses per subnet) are private IP addresses that do not get routed on
+the public internet. All private IP addresses within one private subnet go out
+to the public internet through one public IP address that is rented from the
+Internet service provider (ISP).</p>
+<p>IP belongs to level 3 of the OSI layer model. IP traffic is communicated via
+routers.</p>
+</div>
+<div class="section" id="mac-addresses">
+<h2>MAC Addresses</h2>
+<p>Communication via MAC (media access control) happens on layer 2 of the OSI
+layer model. Switches operate on this layer. The MAC address consists of 6 bytes
+and is shown as “Hardware Address” or “ether” when you run <span class="docutils literal"><span class="pre">ifconfig</span></span> on Linux.
+Anything that uses a network interface (network interface card [NIC], mobile
+phone, etc.) has a MAC address. The first 3 bytes of the MAC address identify
+the manufacturer of the NIC, the last 3 bytes denote the specific device, it
+can be considered as a serial number given by the NIC manufacturer.</p>
+</div>
+<div class="section" id="tcp-udp-and-the-3-way-handshake">
+<h2>TCP, UDP and the 3-Way Handshake</h2>
+<p>The transport layer is layer 4 of the OSI model. The Transmission Control
+Protocol (TCP) is a connection-oriented protocol, whereas the User Datagram
+Protocol (UDP) is connectionless. TCP is best suited when high reliability
+is required, e.g. for HTTP(S), TCP, SSH connections. UDP is used for streaming,
+DNS, voice over IP, etc.. For penetration testing, both types of connections
+have to be scanned.</p>
+<p>TCP establishes a connection between two network devices using a 3-way
+handshake: (1) party A initializes the 3-way handshake by sending a SYN message
+to party B, (2) party B returns a SYN-ACK message to party A, (3) party A
+confirms the SYN-ACK with an ACK message. With the SYN package, party A informs
+party B to which port it wants to connect. There are 65,000 ports that
+are used for different protocols, e.g. HTTP, HTTPS, FTP, etc..</p>
+<p><strong>Example:</strong> Wireshark is used to capture web traffic and find a 3-way handshake
+when a HTTPS connection is established (port 443).</p>
+</div>
+<div class="section" id="common-ports-and-protocols">
+<h2>Common Ports and Protocols</h2>
+<p>These port tables should be memorized so that you recognize which protocols are
+being used when you scan a network.</p>
+<table border="1" class="colwidths-auto docutils" id="id1">
+<caption><span class="caption-text">Common TCP ports</span></caption>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Port</th>
+<th class="head">Protocol</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>21</td>
+<td>FTP (File Transfer Protocol)</td>
+</tr>
+<tr class="row-odd"><td>22</td>
+<td>SSH (Secure Shell, encrypted remote login)</td>
+</tr>
+<tr class="row-even"><td>23</td>
+<td>Telnet (Remote Login, clear text)</td>
+</tr>
+<tr class="row-odd"><td>25</td>
+<td>SMTP (Simple Mail Transfer Protocol)</td>
+</tr>
+<tr class="row-even"><td>53</td>
+<td>DNS (Domain Name System, resolves names to IP addresses)</td>
+</tr>
+<tr class="row-odd"><td>80</td>
+<td>HTTP (Hypertext Transfer Protocol, not encrypted/secure)</td>
+</tr>
+<tr class="row-even"><td>110</td>
+<td>POP3 (email protocol)</td>
+</tr>
+<tr class="row-odd"><td>139</td>
+<td>SMB (Samba, Windows file sharing)</td>
+</tr>
+<tr class="row-even"><td>143</td>
+<td>IMAP (email protocol)</td>
+</tr>
+<tr class="row-odd"><td>443</td>
+<td>HTTPS (encrypted/secure HTTP)</td>
+</tr>
+<tr class="row-even"><td>445</td>
+<td>SMB (Samba, Windows file sharing, very frequent exploit)</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="colwidths-auto docutils" id="id2">
+<caption><span class="caption-text">Common UDP ports</span></caption>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Port</th>
+<th class="head">Protocol</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>53</td>
+<td>DNS (Domain Name System)</td>
+</tr>
+<tr class="row-odd"><td>67</td>
+<td>DHCP (Dynamic Host Control Protocol, IP address assignment)</td>
+</tr>
+<tr class="row-even"><td>68</td>
+<td>DHCP</td>
+</tr>
+<tr class="row-odd"><td>69</td>
+<td>TFTP (Trivial FTP)</td>
+</tr>
+<tr class="row-even"><td>161</td>
+<td>SNMP (Simple Network Management Protocol)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="the-osi-model">
+<h2>The OSI Model</h2>
+<p>Mnemonic to memorize the layers of the OSI model: “Please do not throw sausage
+pizza away!”</p>
+<table border="1" class="colwidths-auto docutils" id="id3">
+<caption><span class="caption-text">OSI Layers</span></caption>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Layer</th>
+<th class="head">&#160;</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>1</td>
+<td>Physical layer (physical representation of bits)</td>
+</tr>
+<tr class="row-odd"><td>2</td>
+<td>Data layer (MAC addresses, switches)</td>
+</tr>
+<tr class="row-even"><td>3</td>
+<td>Network layer (IP addresses, routing)</td>
+</tr>
+<tr class="row-odd"><td>4</td>
+<td>Transport layer (TCP, UDP)</td>
+</tr>
+<tr class="row-even"><td>5</td>
+<td>Session layer (session management)</td>
+</tr>
+<tr class="row-odd"><td>6</td>
+<td>Presentation layer (wmv, jpeg, mov)</td>
+</tr>
+<tr class="row-even"><td>7</td>
+<td>Application layer (HTTP, SMTP)</td>
+</tr>
+</tbody>
+</table>
+<p>Troubleshooting should always start at layer 1 (physical) moving down through
+the OSI stack until one finds the layer where the problem occurs.</p>
+</div>
+<div class="section" id="subnetting">
+<h2>Subnetting</h2>
+<p>When you enter the <span class="docutils literal"><span class="pre">ifconfig</span></span> command, the output does not only show your
+IPv4 address (<span class="docutils literal"><span class="pre">inet</span></span>), but also the subnet mask (<span class="docutils literal"><span class="pre">netmask</span></span>). Like the IPv4
+address, the subnet mask consists of four bytes with 8 bits each. The positions
+of the 1’s and 0’s in the subnet mask determine the IP address space that makes
+up the subnet that the IP address belongs to. The bits are switched on from
+leftmost to rightmost bit, the positions on the right side of the bit pattern
+where the bits are 0 determine which IP addresses belong to the subnet. The
+number of bits that set to one is called CIDR (Classless Inter-Domain Routing)
+and is added as an abbreviated form of the subnet mask to the IP address of the
+subnet (i.e. the lowest IP address that fulfills the pattern). A class C subnet
+has a /24 CIDR and provides 256 IP addresses (hosts), 2 of which are used to
+denote the network ID (1st address) and the broadcast address (last address).
+It is commonly used for households and small businesses.</p>
+<p>The goal of subnetting is to optimize the size of the subnet to provide sufficient
+IP addresses for the intended number of hosts, but not unnecessarily wasting IP
+address space, assuming that an organization can use a certain IP address
+space.</p>
+</div>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Von Andreas Janzen</span>
+        </div>
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="takingnotes.html">Taking Notes</a></li>
+            <li class="right"><a href="introductiontolinux.html">Introduction to Linux</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Aktuell</h1>
+    <ul><li>
+            <a href="takingnotes.html">Taking Notes</a>
+        </li><li>
+            <a href="#">Networking Refresher</a>
+        </li><li>
+            <a href="introductiontolinux.html">Introduction to Linux</a>
+        </li><li>
+            <a href="../../04/12/rps.html">picoCTF: RPS</a>
+        </li><li>
+            <a href="../../04/12/fresh_java.html">picoCTF: Fresh Java</a>
+        </li><li>
+            <a href="../../04/06/unpackme_py.html">picoCTF: unpackme.py</a>
+        </li><li>
+            <a href="../../04/06/local_authority.html">picoCTF: Local Authority</a>
+        </li><li>
+            <a href="../../04/04/picoctf_sqli_lite.html">picoCTF: SQLiLite</a>
+        </li><li>
+            <a href="../../04/04/picoctf_basic_file_exploit.html">picoCTF: basic-file-exploit</a>
+        </li><li>
+            <a href="../../03/28/hello_world.html">Hello World!</a>
+        </li></ul>
+</div>
+</section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2022, Andreas Janzen. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
