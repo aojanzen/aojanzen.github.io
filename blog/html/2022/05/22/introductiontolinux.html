@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="picoCTF: RPS" href="../../04/12/rps.html" /><link rel="prev" title="Networking Refresher" href="networkingrefresher.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Taking Notes" href="../21/takingnotes.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.7.2',
@@ -75,7 +75,7 @@
                 </li>
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
-            <span>May 21, 2022</span>
+            <span>May 22, 2022</span>
         </div>
     <div class="section" id="introduction-to-linux">
 <h1>Introduction to Linux</h1>
@@ -158,6 +158,103 @@ Just entering <span class="docutils literal"><span class="pre">cd</span></span> 
 home directory.</p>
 <p>Hidden files and folders are displayed with <span class="docutils literal"><span class="pre">ls</span> <span class="pre">-la</span></span>. Hidden
 files and folders have names that begin with a period (e.g. <span class="docutils literal"><span class="pre">.bashrc</span></span>).</p>
+<p>To locate a file in the filesystem, one can use the <span class="docutils literal"><span class="pre">locate</span></span> command, etc.
+<span class="docutils literal"><span class="pre">locate</span> <span class="pre">bash</span></span>, which displays all files that have bash in their filename. It
+might be necessary to update the database which is used for the locate command
+with <span class="docutils literal"><span class="pre">sudo</span> <span class="pre">updatedb</span></span>.</p>
+<p>To change the password, use the <span class="docutils literal"><span class="pre">passwd</span></span> command. You have to enter the old
+password first and then the new password twice.</p>
+<p>Linux systems provide manual (man) pages for every command. These man pages can
+be displayed by <span class="docutils literal"><span class="pre">man</span> <span class="pre">&lt;command&gt;</span></span>. Part of this information is often also
+provided if one adds the command line switch <span class="docutils literal"><span class="pre">--help</span></span> to the command, e.g.
+<span class="docutils literal"><span class="pre">ls</span> <span class="pre">--help</span></span>.</p>
+<a class="reference internal image-reference" href="../../../_images/help_switch.png"><img alt="../../../_images/help_switch.png" src="../../../_images/help_switch.png" style="width: 654.0px; height: 370.0px;" /></a>
+</div>
+<div class="section" id="users-and-privileges">
+<h2>Users and Privileges</h2>
+<p>An <span class="docutils literal"><span class="pre">ls</span> <span class="pre">-la</span></span> command shows the access rights to files and subfolders in the
+leftmost column of the command’s output:</p>
+<a class="reference internal image-reference" href="../../../_images/access_rights.png"><img alt="../../../_images/access_rights.png" src="../../../_images/access_rights.png" style="width: 868.0px; height: 387.0px;" /></a>
+<p>The leftmost character (‘d’ or ‘-‘) tells us if the respective item is a
+directory (‘d’) or a file (‘-‘). The following 9 characters indicate the right
+to read (‘r’), write (‘w’) or execute (‘x’) the respective file for the owner
+of the file, the owner’s group and any other user. For penetration test, the
+<span class="docutils literal"><span class="pre">/tmp</span></span> folder is oftentimes used to upload exploits since the tmp folder
+gives full access rights to every user. A pentester will also look for other
+files with insecure configurations that may offer a route to gain higher access
+rights.</p>
+<a class="reference internal image-reference" href="../../../_images/access_tmp.png"><img alt="../../../_images/access_tmp.png" src="../../../_images/access_tmp.png" style="width: 473.0px; height: 212.0px;" /></a>
+<p>To change access rights, the <span class="docutils literal"><span class="pre">chmod</span></span> command is used, followed by ‘u’ for
+user, ‘g’ for group or ‘o’ for others and a ‘+’ or ‘-‘ and the permissions
+(‘r’, ‘w’, ‘x’) that shell be set or revoked.</p>
+<p><strong>Example</strong>: <span class="docutils literal"><span class="pre">chmod</span> <span class="pre">u+x</span> <span class="pre">&lt;filename&gt;</span></span> makes the file executable. It is also
+possible to modify several settings at a time, e.g. with <span class="docutils literal"><span class="pre">chmod</span> <span class="pre">ug+rw,</span> <span class="pre">o-x</span>
+<span class="pre">&lt;filename&gt;</span></span></p>
+<p>Users can be added using the <span class="docutils literal"><span class="pre">sudo</span> <span class="pre">adduser</span> <span class="pre">&lt;name&gt;</span></span> command.</p>
+<img alt="../../../_images/add_user.png" src="../../../_images/add_user.png" />
+<p>When the user has been created, it will show up at the end of the <span class="docutils literal"><span class="pre">/etc/passwd</span></span>
+file. This file used to include the passwords (or hashes of the same), but that
+is not the case any more. A pentester can use access to this file to learn which
+users are present on the respective system, e.g. to use them to hack into SSH
+with their user name.</p>
+<img alt="../../../_images/passwd_file.png" src="../../../_images/passwd_file.png" />
+<p>The password hashes are stored in the file <span class="docutils literal"><span class="pre">/etc/shadow</span></span>, which has
+restricted access rights. If one can get access to the password hashes, it
+might be possible to crack the password with suitable tools, e.g. hashcat.</p>
+<img alt="../../../_images/shadow_file.png" src="../../../_images/shadow_file.png" />
+<p>One can switch to another user account with the <span class="docutils literal"><span class="pre">su</span></span> (switch user) command,
+e.g. <span class="docutils literal"><span class="pre">su</span> <span class="pre">john</span></span>. If a user other than root shall be able to change
+permissions, that user has to be in the sudo’ers group (or file, respectively).
+<span class="docutils literal"><span class="pre">sudo</span> <span class="pre">&lt;command&gt;</span></span> will execute the respective command with root access rights.</p>
+</div>
+<div class="section" id="common-network-commands">
+<h2>Common Network Commands</h2>
+<p>The configurations of the installed network interface cards (NIC) and wireless
+network adapters can be displayed with the <span class="docutils literal"><span class="pre">ifconfig</span></span> and <span class="docutils literal"><span class="pre">iwconfig</span></span>
+commands. The <span class="docutils literal"><span class="pre">ifconfig</span></span> command is Linux’ version of Windows’ <span class="docutils literal"><span class="pre">ipconfig</span></span>
+command.</p>
+<img alt="../../../_images/network_adapters.png" src="../../../_images/network_adapters.png" />
+<p>The <span class="docutils literal"><span class="pre">ping</span> <span class="pre">&lt;IP</span> <span class="pre">address&gt;</span></span> command is used to try if a connection to a certain
+IP address can be established. If the connection cannot be established for some
+reason, the attempt will time out after some time, and an error message will be
+displayed. If the sought IP address exists, the connection is not broken and the
+machine with the sought IP does not block ping (ICMP) traffic, a report with the
+return time will be displayed for each package:</p>
+<img alt="../../../_images/ping.png" src="../../../_images/ping.png" />
+<p>The ping command runs indefinitely, one has to stop it hitting &lt;Ctrl&gt; + &lt;C&gt;.
+When it is stopped, it will display some statistical information.</p>
+<p>The <span class="docutils literal"><span class="pre">arp</span> <span class="pre">-a</span></span> command shows a list of the stored IP connections, i.e. a table
+relating IP addresses (layer 3) with MAC addresses (layer 2). ARP stands for
+Address Resolution Protocol.</p>
+<p>Open sockets on the machine can be displayed with <span class="docutils literal"><span class="pre">netstat</span> <span class="pre">-ano</span></span>.</p>
+<p>The system’s IP routing table can be displayed with the <span class="docutils literal"><span class="pre">route</span></span> command.</p>
+<p><strong>UPDATE:</strong> The commands above are becoming deprecated. Instead of <span class="docutils literal"><span class="pre">ifconfig</span></span>,
+<span class="docutils literal"><span class="pre">arp</span></span> and <span class="docutils literal"><span class="pre">route</span></span>, the new <span class="docutils literal"><span class="pre">ip</span></span> command can be used. <span class="docutils literal"><span class="pre">ip</span> <span class="pre">a</span></span> shows the network
+adapter settings (replacing <span class="docutils literal"><span class="pre">ifconfig</span></span>), <span class="docutils literal"><span class="pre">ip</span> <span class="pre">n</span></span> (n for neighbours) shows
+the ARP table (replacing arp), and <span class="docutils literal"><span class="pre">ip</span> <span class="pre">r</span></span> (r for routes) shows the routing
+table (replacing route).</p>
+<img alt="../../../_images/ip_command.png" src="../../../_images/ip_command.png" />
+</div>
+<div class="section" id="installing-and-updating-tools">
+<h2>Installing and Updating Tools</h2>
+<p>To update Kali Linux, use <span class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">update</span></span> to update the database with the
+latest released software package for the used distribution, followed by <span class="docutils literal"><span class="pre">sudo</span>
+<span class="pre">apt</span> <span class="pre">upgrade</span></span> to actually download and install the packages that are not up to
+date. Note that the latter step might easily take a while! Linux will display
+the additional amount of harddisk space needed and ask if the updates shall be
+carried out. After the update is finished, <span class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt</span> <span class="pre">autoremove</span></span> can be used
+to remove packages that are no longer used to free disk space again.</p>
+<p>When you want to install new software packages from Github, it is good practice
+to install them in the <span class="docutils literal"><span class="pre">/opt</span></span> folder:</p>
+<ol class="arabic simple">
+<li><span class="docutils literal"><span class="pre">cd</span> <span class="pre">/opt</span></span></li>
+<li><span class="docutils literal"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">&lt;link</span> <span class="pre">to</span> <span class="pre">git&gt;</span></span></li>
+<li>Follow the installation instructions on the github page.</li>
+</ol>
+</div>
+<div class="section" id="viewing-creating-and-editing-files">
+<h2>Viewing, Creating and Editing Files</h2>
+<p>dsda</p>
 </div>
 </div>
 
@@ -168,16 +265,16 @@ files and folders have names that begin with a period (e.g. <span class="docutil
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="networkingrefresher.html">Networking Refresher</a></li>
-            <li class="right"><a href="../../04/12/rps.html">picoCTF: RPS</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../21/takingnotes.html">Taking Notes</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Aktuell</h1>
     <ul><li>
-            <a href="takingnotes.html">Taking Notes</a>
-        </li><li>
-            <a href="networkingrefresher.html">Networking Refresher</a>
-        </li><li>
             <a href="#">Introduction to Linux</a>
+        </li><li>
+            <a href="../21/takingnotes.html">Taking Notes</a>
+        </li><li>
+            <a href="../21/networkingrefresher.html">Networking Refresher</a>
         </li><li>
             <a href="../../04/12/rps.html">picoCTF: RPS</a>
         </li><li>
