@@ -202,8 +202,21 @@ to install them in the ``/opt`` folder:
 
 Viewing, Creating and Editing Files
 -----------------------------------
-dsda
-    
+``echo <string>`` prints the string to the terminal window. The output can be
+redirected into a file with ``echo <string> > <filename>``. This will create
+the file or **overwrite** it if it already exists. If the text shall be
+appended to an already existing file, one has to use ``echo <string> >>
+<filename>`` instead of the single ``>`` symbol.
+
+The contents of a text file can be printed to the terminal with the command ``cat
+<filename>``.
+
+Another way to create a file -- but one without any content -- is the command
+``touch <filename>``, which creates an empty file if the file did not exist
+yet. If it already existed, the touch command will update the "last modified"
+entry to the current system time.
+
+Command line text editors include nano and vi/vim. 
 
 
 .. author:: default

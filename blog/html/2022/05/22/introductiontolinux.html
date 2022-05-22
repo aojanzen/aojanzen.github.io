@@ -254,7 +254,18 @@ to install them in the <span class="docutils literal"><span class="pre">/opt</sp
 </div>
 <div class="section" id="viewing-creating-and-editing-files">
 <h2>Viewing, Creating and Editing Files</h2>
-<p>dsda</p>
+<p><span class="docutils literal"><span class="pre">echo</span> <span class="pre">&lt;string&gt;</span></span> prints the string to the terminal window. The output can be
+redirected into a file with <span class="docutils literal"><span class="pre">echo</span> <span class="pre">&lt;string&gt;</span> <span class="pre">&gt;</span> <span class="pre">&lt;filename&gt;</span></span>. This will create
+the file or <strong>overwrite</strong> it if it already exists. If the text shall be
+appended to an already existing file, one has to use <span class="docutils literal"><span class="pre">echo</span> <span class="pre">&lt;string&gt;</span> <span class="pre">&gt;&gt;</span>
+<span class="pre">&lt;filename&gt;</span></span> instead of the single <span class="docutils literal"><span class="pre">&gt;</span></span> symbol.</p>
+<p>The contents of a text file can be printed to the terminal with the command <span class="docutils literal"><span class="pre">cat</span>
+<span class="pre">&lt;filename&gt;</span></span>.</p>
+<p>Another way to create a file – but one without any content – is the command
+<span class="docutils literal"><span class="pre">touch</span> <span class="pre">&lt;filename&gt;</span></span>, which creates an empty file if the file did not exist
+yet. If it already existed, the touch command will update the “last modified”
+entry to the current system time.</p>
+<p>Command line text editors include nano and vi/vim.</p>
 </div>
 </div>
 
