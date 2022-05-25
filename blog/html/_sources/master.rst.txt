@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/05/25/scriptingwithbash
    2022/05/22/introductiontolinux
    2022/05/21/takingnotes
    2022/05/21/networkingrefresher
