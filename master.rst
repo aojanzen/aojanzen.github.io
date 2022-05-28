@@ -4,6 +4,9 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/05/28/passivereconnaissanceoverview
+   2022/05/28/introductionpython
+   2022/05/28/fivestagesofethicalhacking
    2022/05/25/scriptingwithbash
    2022/05/22/introductiontolinux
    2022/05/21/takingnotes
