@@ -1,5 +1,10 @@
-An overview of Passive Recon(naissance)
+An Overview of Passive Recon(naissance)
 =======================================
+Passive reconnaissance means gathering information that is already available on
+the internet, whereas active scanning begins with scanning of hosts.
+
+.. more::
+
 The following physical and social information can be helpul:
 
 * Location information: satellite images, drone recon, building layout (badge
@@ -23,9 +28,7 @@ will be covered in more depth:
   data thefts is by far the most common way of getting into networks. Tools:
   HaveIBeenPwned, Breach-Parse, WeLeakInfo
 
-Passive reconnaissance means gathering information that is already available on
-the internet, whereas active scanning begins with scanning of hosts. Today, in
-external pentests it is most of the time not possible to just scan for
+Today, in external pentests it is most of the time not possible to just scan for
 vulnerabilities and exploit one to get into a network, therefore scanning and
 enumeration are extremely important, especially looking for breached data. The
 better you are at information gathering, the more successful you are going to
