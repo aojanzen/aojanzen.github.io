@@ -4,6 +4,8 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/05/28/identifyingourtarget
+   2022/05/28/discoveringemailadresses
    2022/05/28/passivereconnaissanceoverview
    2022/05/28/introductionpython
    2022/05/28/fivestagesofethicalhacking
