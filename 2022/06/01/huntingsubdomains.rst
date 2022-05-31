@@ -23,6 +23,7 @@ database will list all subdomains for which certificates have been issued.
 These can be 3rd and 4th level subdomains.
 
 .. image:: crt_sh_tesla.png
+   :scale: 70%
 
 TCM recommends to look for ``dev``, ``test``, ``sso``, ``stage``, for mail
 servers and perhaps also for clues as to which tools are used on the target.
@@ -30,7 +31,13 @@ servers and perhaps also for clues as to which tools are used on the target.
 Finally, a popular tool among bug-bounty hunters is OWASP's ``Amass`` tool
 that can be cloned from `github <https://github.com/OWASP/Amass>`_. However, it
 was already installed on my version of Kali Linux. I could not get proper results
-when I tested ``Amass`` in ``intel`` mode. Maybe I have used it wrong.
+when I tested ``Amass`` in ``intel`` mode. After some trying, I believe that I
+still need to set up the ``config.ini`` file correctly, especially add
+credentials to use the APIs that the program uses. This seems to be a task that
+requires some diligence. I will postpone that until later. Youtube videos might
+help.
+
+.. image:: amass_tesla.png
 
 To check whether the found subdomains are alive, one can run the found domains
 through a tool called ``httprobe``, which is preinstalled on my Kali Linux. It

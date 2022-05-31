@@ -10,6 +10,7 @@ The first tool that is presented here is ``builtwith``, an `online tool
 domain that one has entered.
 
 .. image:: builtwith_tesla.png
+   :scale: 80%
 
 The site lists all used technology per category, e.g. in "Analytics and
 Tracking", "Widgets", "Language", "Mobile", "Content Delivery Network",

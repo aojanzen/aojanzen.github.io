@@ -4,9 +4,8 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
-   2022/05/31/drafts_identifyingwebsitetechnologies_rst
-   2022/05/31/identifyingwebsitetechnologies
-   2022/05/31/huntingsubdomains
+   2022/06/01/huntingsubdomains
+   2022/06/01/identifyingwebsitetechnologies
    2022/05/30/huntingbreachedpasswordswithdehashed
    2022/05/29/gatheringbreachedcredentials
    2022/05/28/takingnotes
