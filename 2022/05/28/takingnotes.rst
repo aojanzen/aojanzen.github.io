@@ -1,7 +1,10 @@
 Taking Notes
 ============
 
-Use notekeeping tools to store key information (commands, screenshots)!
+Use notekeeping tools to write key information down for later referral. Write
+down the actual commands and take screenshots!
+
+.. more::
 
 Information from different sources can be brought together in one notebook, but
 several notebooks on different topics are also sensible to keep the complexity
@@ -15,7 +18,8 @@ Use an image editor, e.g. to add a border, invert colors (especially when workin
 in dark mode!), obfuscate information, copy to clipboard and from there into
 notekeeping tool.
 
-For notekeeping: Windows: KeepNote (not updated for a while!), OneNote, Linux: Cherrytree
+For notekeeping: Windows: KeepNote (not updated for a while!), OneNote, Linux:
+Cherrytree
 For screenshots: Windows: Greenshot, Linux: Flameshot
 
 Pen and paper is also a possible alternative!

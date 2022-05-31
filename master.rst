@@ -4,6 +4,12 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/05/31/drafts_identifyingwebsitetechnologies_rst
+   2022/05/31/identifyingwebsitetechnologies
+   2022/05/31/huntingsubdomains
+   2022/05/30/huntingbreachedpasswordswithdehashed
+   2022/05/29/gatheringbreachedcredentials
+   2022/05/28/takingnotes
    2022/05/28/passivereconnaissanceoverview
    2022/05/28/identifyingourtarget
    2022/05/28/discoveringemailadresses
@@ -11,7 +17,6 @@ Sitemap
    2022/05/28/fivestagesofethicalhacking
    2022/05/25/scriptingwithbash
    2022/05/22/introductiontolinux
-   2022/05/21/takingnotes
    2022/05/21/networkingrefresher
    2022/04/12/rps
    2022/04/12/fresh_java
