@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
         <meta name="viewport" content="width=device-width">
-        <title>Identifying Our Target &mdash; From Noob to Hacker</title>
+        <title>Google Fu &mdash; From Noob to Hacker</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Discovering Email Adresses" href="discoveringemailadresses.html" /><link rel="prev" title="An Overview of Passive Recon(naissance)" href="passivereconnaissanceoverview.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Information Gathering with Burp Suite" href="informationgatheringwithburpsuite.html" /><link rel="prev" title="Utilizing Social Media" href="utilizingsocialmedia.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.7.2',
@@ -75,23 +75,28 @@
                 </li>
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
-            <span>May 28, 2022</span>
+            <span>June 02, 2022</span>
         </div>
-    <div class="section" id="identifying-our-target">
-<h1>Identifying Our Target</h1>
-<p>To find a client that we can attack (legally) to practice reconnaissance, we
-use the public bugbounty program <a class="reference external" href="https://www.bugcrowd.com/">bugcrowd.com</a>.</p>
-<div id="more"> </div><p>There are programs on their website that allow you to attack their websites or
-part of their websites, report bugs to the website owner and receive a payment
-as a reward.</p>
-<p>TESLA was used as an example in “Practical Ethical Hacking”, but one definitely
-has to make sure that the program is still active before one starts any
-hacktivity against some website. On the bugcrowd website, click on “Products”
-to see all active bugbounty programs. TESLA can be found with the search bar on
-top of the page.</p>
-<img alt="../../../_images/bugcrowd_search.png" src="../../../_images/bugcrowd_search.png" />
-<p>One should read the “Rules of Engagement” thoroughly, especially the websites
-that are out of scope.</p>
+    <div class="section" id="google-fu">
+<h1>Google Fu</h1>
+<p>Google is a super helpful source of information for pentesters that makes a
+successful pentester.</p>
+<div id="more"> </div><p>An overview of the syntax for Google’s search engine can easily be found
+<a class="reference external" href="https://ahrefs.com/blog/google-advanced-search-operators/">online</a>. Some of
+these operators can be used to narrow down our search results and improve the
+quality of our results a lot.</p>
+<ul class="simple">
+<li><span class="docutils literal"><span class="pre">site:tesla.com</span></span> will limit the results to hits on the domains ending on
+<span class="docutils literal"><span class="pre">tesla.com</span></span></li>
+<li>Certain subdomains can be taken out of the search results with the <span class="docutils literal"><span class="pre">-</span></span>
+operator, e.g. <span class="docutils literal"><span class="pre">site:tesla.com</span> <span class="pre">-www</span></span></li>
+<li>One can also search for specific filetypes, e.g. for pdf documents, with the
+<span class="docutils literal"><span class="pre">filetype</span></span> qualifier, e.g. <span class="docutils literal"><span class="pre">site:</span> <span class="pre">tesla</span> <span class="pre">filetype:pdf</span></span>. It is sometimes
+possible to find documents (e.g. <span class="docutils literal"><span class="pre">doc</span></span>, <span class="docutils literal"><span class="pre">docx</span></span>, <span class="docutils literal"><span class="pre">xlsx</span></span>, <span class="docutils literal"><span class="pre">csv</span></span>, etc.)
+with highly sensitive information just by searching for these filetypes.</li>
+</ul>
+<p>In addition to the hints in the video, I should familiarize myself with the
+many details provided on the above-named website.</p>
 </div>
 
     <div class="postmeta">
@@ -101,30 +106,30 @@ that are out of scope.</p>
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="passivereconnaissanceoverview.html">An Overview of Passive Recon(naissance)</a></li>
-            <li class="right"><a href="discoveringemailadresses.html">Discovering Email Adresses</a> &raquo; </li>
+            <li class="left"> &laquo; <a href="utilizingsocialmedia.html">Utilizing Social Media</a></li>
+            <li class="right"><a href="informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Aktuell</h1>
     <ul><li>
-            <a href="../../06/02/utilizingsocialmedia.html">Utilizing Social Media</a>
+            <a href="utilizingsocialmedia.html">Utilizing Social Media</a>
         </li><li>
-            <a href="../../06/02/googlefu.html">Google Fu</a>
+            <a href="#">Google Fu</a>
         </li><li>
-            <a href="../../06/02/informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a>
+            <a href="informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a>
         </li><li>
-            <a href="../../06/01/huntingsubdomains.html">Hunting Subdomains (Parts 1 and 2)</a>
+            <a href="../01/huntingsubdomains.html">Hunting Subdomains (Parts 1 and 2)</a>
         </li><li>
-            <a href="../../06/01/identifyingwebsitetechnologies.html">Identifying Website Technologies</a>
+            <a href="../01/identifyingwebsitetechnologies.html">Identifying Website Technologies</a>
         </li><li>
-            <a href="../30/huntingbreachedpasswordswithdehashed.html">Hunting Breached Credentials with DeHashed</a>
+            <a href="../../05/30/huntingbreachedpasswordswithdehashed.html">Hunting Breached Credentials with DeHashed</a>
         </li><li>
-            <a href="../29/gatheringbreachedcredentials.html">Gathering Breached Credentials with Breach-Parse</a>
+            <a href="../../05/29/gatheringbreachedcredentials.html">Gathering Breached Credentials with Breach-Parse</a>
         </li><li>
-            <a href="takingnotes.html">Taking Notes</a>
+            <a href="../../05/28/takingnotes.html">Taking Notes</a>
         </li><li>
-            <a href="passivereconnaissanceoverview.html">An Overview of Passive Recon(naissance)</a>
+            <a href="../../05/28/passivereconnaissanceoverview.html">An Overview of Passive Recon(naissance)</a>
         </li><li>
-            <a href="#">Identifying Our Target</a>
+            <a href="../../05/28/identifyingourtarget.html">Identifying Our Target</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">

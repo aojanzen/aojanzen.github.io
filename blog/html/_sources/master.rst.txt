@@ -4,6 +4,9 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/06/02/utilizingsocialmedia
+   2022/06/02/googlefu
+   2022/06/02/informationgatheringwithburpsuite
    2022/06/01/huntingsubdomains
    2022/06/01/identifyingwebsitetechnologies
    2022/05/30/huntingbreachedpasswordswithdehashed
