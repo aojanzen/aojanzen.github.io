@@ -1,0 +1,191 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
+        <meta name="viewport" content="width=device-width">
+        <title>Scanning with Nmap &mdash; From Noob to Hacker</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Installing Kioptrix" href="installingkioptrix.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">From Noob to Hacker</a></h1><h2>Things I have learned along the way</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../index.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/about.html">About</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/ctf_writeups.html">CTF Writeups</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/linux_and_tools.html">Linux and Tools</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/hacking.html">Hacking and Networks</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>June 03, 2022</span>
+        </div>
+    <div class="section" id="scanning-with-nmap">
+<h1>Scanning with Nmap</h1>
+<p>In this section, we will learn how to use <span class="docutils literal"><span class="pre">Nmap</span></span> to scan a target machine for
+open ports and services running on the machine that can be exploited in the
+following step.</p>
+<div id="more"> </div><p>The Kioptrix machine is already quite old, therefore <span class="docutils literal"><span class="pre">ip</span></span> and <span class="docutils literal"><span class="pre">ifconfig</span></span>
+are not available on that machine. However, to get to know the IP address of
+the Kioptrix machine, we can simply use the <span class="docutils literal"><span class="pre">ping</span></span> command, e.g. <span class="docutils literal"><span class="pre">ping</span>
+<span class="pre">8.8.8.</span></span> (or any other IP address, does not matter), and we will see the IP of
+the Kioptrix machine.</p>
+<img alt="../../../_images/Kioptrix_ping.png" src="../../../_images/Kioptrix_ping.png" />
+<p>We can see that in the setup shown above, the IP address was
+<span class="docutils literal"><span class="pre">192.168.156.132</span></span>.</p>
+<p>We can also use a tool installed on Kali Linux named <span class="docutils literal"><span class="pre">arp-scan</span></span>. With the
+command switch <span class="docutils literal"><span class="pre">-l</span></span> or <span class="docutils literal"><span class="pre">-localnet</span></span>, the target IP address range is
+generated from our local network interface configuration (network IP address
+and network mask). <span class="docutils literal"><span class="pre">arp-scan</span></span> has to be executed as <span class="docutils literal"><span class="pre">sudo</span></span>. We need to look
+for IP addresses that relate to <span class="docutils literal"><span class="pre">VMWare,</span> <span class="pre">Inc.</span></span>.</p>
+<img alt="../../../_images/arp-scan.png" src="../../../_images/arp-scan.png" />
+<p>In the 2019 version of the video, TCM used a tool called <span class="docutils literal"><span class="pre">netdiscover</span></span>. This
+tool is also installed under Kali Linux and works just as well as <span class="docutils literal"><span class="pre">arp-scan</span></span>.
+Again, one has to start it with <span class="docutils literal"><span class="pre">sudo</span></span>, e.g. <span class="docutils literal"><span class="pre">sudo</span> <span class="pre">netdiscover</span> <span class="pre">-r</span>
+<span class="pre">192.168.156.0/24</span></span> where the <span class="docutils literal"><span class="pre">-r</span></span> switch defines the scan range in <span class="docutils literal"><span class="pre">CIDR</span></span>
+notation.</p>
+<img alt="../../../_images/netdiscover.png" src="../../../_images/netdiscover.png" />
+<p>The <span class="docutils literal"><span class="pre">Nmap</span></span> tool uses an interrupted 3-way handshake to scan for open ports and
+services. Instead of the ususal <span class="docutils literal"><span class="pre">SYN`,</span> <span class="pre">``SYN/ACK</span></span> (in case the <span class="docutils literal"><span class="pre">SYN</span></span> has
+been sent to an open port before), <span class="docutils literal"><span class="pre">ACK</span></span> process, it resets the request t
+o establish a network connection sending an <span class="docutils literal"><span class="pre">RST</span></span> packet in return to the
+<span class="docutils literal"><span class="pre">SYN/ACK</span></span> message. This resets the request. Thereby we can identify that the
+port is open, even though we do not actually establish a connection.</p>
+<p>There used to be a “stealth” mode for Nmap that could be invoked with <span class="docutils literal"><span class="pre">nmap</span>
+<span class="pre">-sS</span></span>, but this mode is not stealthy any more today. Modern intrusion detection
+systems (IDS) will detect the scan safely, but TCM reports that less than 80%
+of the scans get detected, because not every administrator uses an IDS.</p>
+<p>We will use the <span class="docutils literal"><span class="pre">nmap</span></span> command with the following switches: <span class="docutils literal"><span class="pre">nmap</span> <span class="pre">-T4</span> <span class="pre">-p-</span>
+<span class="pre">-A</span> <span class="pre">&lt;IP</span> <span class="pre">address&gt;</span></span>. The <span class="docutils literal"><span class="pre">-T4</span></span> parameter determines the scan speed, running from 1 (slow) to
+5 (fast). The slower the scan, the lower the chances of being detected. The
+switch <span class="docutils literal"><span class="pre">-p-</span></span> means that all ports (1-65535) shall be scanned. Without the
+<span class="docutils literal"><span class="pre">p``switch</span> <span class="pre">``nmap</span></span> will just scan the top 1000 ports, which are the most
+commonly used ones, but we could miss a service. One can also scan specific
+ports, e.g. with <span class="docutils literal"><span class="pre">nmap</span> <span class="pre">-T4</span> <span class="pre">-p</span> <span class="pre">80,443,53</span> <span class="pre">-A</span></span>. The <span class="docutils literal"><span class="pre">-A</span></span> parameter means that
+<span class="docutils literal"><span class="pre">nmap</span></span> will tell us all available information, including, e.g. version
+information, operating system, etc.</p>
+<img alt="../../../_images/nmap_Kioptrix.png" src="../../../_images/nmap_Kioptrix.png" />
+<p>The most important parameters that we need to know are <span class="docutils literal"><span class="pre">-sS</span></span> for stealth mode
+and <span class="docutils literal"><span class="pre">-sU</span></span> for a UDP scan (default is TCP). These will cover 99% of our use
+cases, according to TCM. UDP also covers 65535 ports. Since UDP is a
+connectionless protocol, the response times can be much longer than for TCP,
+and therefore an entire scan can take very long time. TCM therefore recommends
+to just scan the top 1000 ports: <span class="docutils literal"><span class="pre">nmap</span> <span class="pre">-sU</span> <span class="pre">-T4</span> <span class="pre">-p</span> <span class="pre">&lt;IP</span> <span class="pre">address&gt;</span></span>.</p>
+<p>It is usually much faster to run a scan with <span class="docutils literal"><span class="pre">-p-</span></span> first and leave the <span class="docutils literal"><span class="pre">-A</span></span>
+switch, which tells <span class="docutils literal"><span class="pre">nmap</span></span> to deliver the maximum available information, out.
+Once we have seen which ports are open in the first scan (without <span class="docutils literal"><span class="pre">-A</span></span>), we
+can do a second scan with the <span class="docutils literal"><span class="pre">-A</span></span> switch but limit the scan only to the
+ports that were found open. This procedure can also be automated with a script.
+However, this is not really necessary since an <span class="docutils literal"><span class="pre">nmap</span></span> scan is among the first
+things that one does in a pentest, and while the scan runs one can just as well
+spend the time on OSINT exercises, such as looking for breached credentials or
+scanning for information on social media.</p>
+<img alt="../../../_images/2-stage_nmap.png" src="../../../_images/2-stage_nmap.png" />
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Von Andreas Janzen</span>
+        </div>
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"></li>
+            <li class="right"><a href="installingkioptrix.html">Installing Kioptrix</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Aktuell</h1>
+    <ul><li>
+            <a href="#">Scanning with Nmap</a>
+        </li><li>
+            <a href="installingkioptrix.html">Installing Kioptrix</a>
+        </li><li>
+            <a href="utilizingsocialmedia.html">Utilizing Social Media</a>
+        </li><li>
+            <a href="../02/googlefu.html">Google Fu</a>
+        </li><li>
+            <a href="../02/informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a>
+        </li><li>
+            <a href="../01/huntingsubdomains.html">Hunting Subdomains (Parts 1 and 2)</a>
+        </li><li>
+            <a href="../01/identifyingwebsitetechnologies.html">Identifying Website Technologies</a>
+        </li><li>
+            <a href="../../05/30/huntingbreachedpasswordswithdehashed.html">Hunting Breached Credentials with DeHashed</a>
+        </li><li>
+            <a href="../../05/29/gatheringbreachedcredentials.html">Gathering Breached Credentials with Breach-Parse</a>
+        </li><li>
+            <a href="../../05/28/takingnotes.html">Taking Notes</a>
+        </li></ul>
+</div>
+</section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2022, Andreas Janzen. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>

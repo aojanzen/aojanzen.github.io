@@ -4,6 +4,9 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/06/03/scanningwithnmap
+   2022/06/03/installingkioptrix
+   2022/06/03/utilizingsocialmedia
    2022/06/02/googlefu
    2022/06/02/informationgatheringwithburpsuite
    2022/06/01/huntingsubdomains
