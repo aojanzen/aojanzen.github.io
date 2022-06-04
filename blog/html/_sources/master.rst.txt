@@ -4,6 +4,7 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/06/04/enumeratinghttpandhttps
    2022/06/03/scanningwithnmap
    2022/06/03/installingkioptrix
    2022/06/03/utilizingsocialmedia
