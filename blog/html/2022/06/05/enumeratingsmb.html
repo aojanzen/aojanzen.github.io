@@ -1,0 +1,187 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
+        <meta name="viewport" content="width=device-width">
+        <title>Enumerating SMB &mdash; From Noob to Hacker</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Enumerating HTTP and HTTPS" href="../04/enumeratinghttpandhttps.html" /><link rel="prev" title="Researching Potential Vulnerabilities" href="../06/researchingpotentialvulnerabilities.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">From Noob to Hacker</a></h1><h2>Things I have learned along the way</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../index.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/about.html">About</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/ctf_writeups.html">CTF Writeups</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/linux_and_tools.html">Linux and Tools</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/hacking.html">Hacking and Networks</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>June 05, 2022</span>
+        </div>
+    <div class="section" id="enumerating-smb">
+<h1>Enumerating SMB</h1>
+<p>SMB (Server Message Block) is a file-sharing protocol used in networks to up-
+and download files to a shared folder. SMB is typically used in work and
+internal environments.</p>
+<div id="more"> </div><p>In our Kioptrix pentest, the <span class="docutils literal"><span class="pre">nmap</span></span> scan revealed that a Samba server was
+accessible on the open port 139, and the workgroup name was <span class="docutils literal"><span class="pre">MYGROUP</span></span>. The
+scripts part of <span class="docutils literal"><span class="pre">nmap</span></span> revealed that the Samba version was probably <span class="docutils literal"><span class="pre">SMB2</span></span>,
+but we do not know the exact version yet, which would be valuable for an
+exploit. We can also try to connect to the SMB service and try to get access to
+files that contain valuable information.</p>
+<p>We will use a tool called <span class="docutils literal"><span class="pre">MetaSploit</span></span> to get more information on the SMB
+version and to try to exploit it. We can start it by entering <span class="docutils literal"><span class="pre">msfconsole</span></span> on
+the command line. <span class="docutils literal"><span class="pre">MetaSploit</span></span> is very powerful. It offers tools for
+enumeration, exploitation and the post-exploitation stage as well. It has quite
+some learning curve, but it will be one of the most used tools for pentesters
+in the field.</p>
+<a class="reference internal image-reference" href="../../../_images/metasploit_search.png"><img alt="../../../_images/metasploit_search.png" src="../../../_images/metasploit_search.png" style="width: 835.2px; height: 614.4000000000001px;" /></a>
+<p>To find the available tools for SMB enumeration and exploitation we can simply
+search for the term “smb” on the <span class="docutils literal"><span class="pre">MetaSploit</span></span> command line with <span class="docutils literal"><span class="pre">search</span>
+<span class="pre">smb</span></span>. This will yield a very long list of available features (here: 131 hits!),
+from which we can pick one either by name or by id. The features are grouped by
+categories, which is helpful to find the sought functionality. In this case we
+are looking for a scanner for the SMB version, which we find under id 131.</p>
+<a class="reference internal image-reference" href="../../../_images/metasploit_module.png"><img alt="../../../_images/metasploit_module.png" src="../../../_images/metasploit_module.png" style="width: 823.2px; height: 78.4px;" /></a>
+<p>We can load this module now typing either <span class="docutils literal"><span class="pre">use</span>
+<span class="pre">auxiliary/scanner/smb/smb_version</span></span> or <span class="docutils literal"><span class="pre">use</span> <span class="pre">102</span></span>, using the id. The
+<span class="docutils literal"><span class="pre">MetaSploit</span></span> command line prompt will then show that the respective module is
+active now. We can get some information about the usage of the module if we
+type <span class="docutils literal"><span class="pre">info</span></span>.</p>
+<a class="reference internal image-reference" href="../../../_images/metasploit_info.png"><img alt="../../../_images/metasploit_info.png" src="../../../_images/metasploit_info.png" style="width: 820.0px; height: 379.20000000000005px;" /></a>
+<p>There are two options that we need to set before we can start the enumeration,
+<span class="docutils literal"><span class="pre">RHOSTS</span></span> and <span class="docutils literal"><span class="pre">THREADS</span></span>, which has a default value of 1 and thus does not
+necessarily need to be set. <span class="docutils literal"><span class="pre">RHOSTS</span></span> in plural form means that we can assign
+a range of IP addresses in CIDR notation or just a single IP address, whereas
+<span class="docutils literal"><span class="pre">RHOST</span></span> would accept only a single IP address. In our case, we can set the
+values with <span class="docutils literal"><span class="pre">set</span> <span class="pre">RHOSTS</span> <span class="pre">192.168.156.132</span></span>, followed by <span class="docutils literal"><span class="pre">run</span></span> to actually
+start the scan.</p>
+<a class="reference internal image-reference" href="../../../_images/metasploit_scan_result.png"><img alt="../../../_images/metasploit_scan_result.png" src="../../../_images/metasploit_scan_result.png" style="width: 620.8000000000001px; height: 107.2px;" /></a>
+<p>The scan shows that the Samba server is version 2.2.1a, and we can use this now
+to search on the internet or our hacking tools whether we can find an exploit
+for this Samba version. This is an important finding that we should add to our
+pentest report. If one has gathered a lot of detailed information in the
+reconnaissance and enumeration phase, the exploitation is a rather easy part,
+according to TCM.</p>
+<p>The next tool is called <span class="docutils literal"><span class="pre">smbclient</span></span>. It will try to connect to the file
+share. We can even try to do this anonymously. The command <span class="docutils literal"><span class="pre">smbclient</span> <span class="pre">-L</span>
+<span class="pre">\\\\192.168.156.132\\</span></span> will connect to the SMB service, and the <span class="docutils literal"><span class="pre">-L</span></span> flag
+tells the program to list all shares. When we are asked for a password, we can
+try to just hit enter. As a result, we get a list of the shares: <span class="docutils literal"><span class="pre">IPC$</span></span> and
+<span class="docutils literal"><span class="pre">ADMIN$</span></span>. We can then try to connect to these two shares directly and leave
+the <span class="docutils literal"><span class="pre">-L</span></span> switch away.</p>
+<a class="reference internal image-reference" href="../../../_images/smbclient_connect.png"><img alt="../../../_images/smbclient_connect.png" src="../../../_images/smbclient_connect.png" style="width: 721.6px; height: 441.6px;" /></a>
+<p>We find that we cannot get access to the <span class="docutils literal"><span class="pre">ADMIN$</span></span> share without a password,
+but we get access to <span class="docutils literal"><span class="pre">IPC$</span></span>. However, we cannot execute any commands once we
+are logged in anonymously, therefore this is also a dead end for now, and we
+can just exit the smb server with <span class="docutils literal"><span class="pre">exit</span></span>.</p>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Von Andreas Janzen</span>
+        </div>
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../06/researchingpotentialvulnerabilities.html">Researching Potential Vulnerabilities</a></li>
+            <li class="right"><a href="../04/enumeratinghttpandhttps.html">Enumerating HTTP and HTTPS</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Aktuell</h1>
+    <ul><li>
+            <a href="../06/researchingpotentialvulnerabilities.html">Researching Potential Vulnerabilities</a>
+        </li><li>
+            <a href="#">Enumerating SMB</a>
+        </li><li>
+            <a href="../04/enumeratinghttpandhttps.html">Enumerating HTTP and HTTPS</a>
+        </li><li>
+            <a href="../03/scanningwithnmap.html">Scanning with Nmap</a>
+        </li><li>
+            <a href="../03/installingkioptrix.html">Installing Kioptrix</a>
+        </li><li>
+            <a href="../03/utilizingsocialmedia.html">Utilizing Social Media</a>
+        </li><li>
+            <a href="../02/googlefu.html">Google Fu</a>
+        </li><li>
+            <a href="../02/informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a>
+        </li><li>
+            <a href="../01/huntingsubdomains.html">Hunting Subdomains (Parts 1 and 2)</a>
+        </li><li>
+            <a href="../01/identifyingwebsitetechnologies.html">Identifying Website Technologies</a>
+        </li></ul>
+</div>
+</section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2022, Andreas Janzen. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
