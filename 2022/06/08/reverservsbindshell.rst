@@ -8,11 +8,6 @@ differences between a **Reverse Shell** and a **Bind Shell** will be discussed.
 
 .. more::
 
-The website `hackingtutorials.org
-<https://www.hackingtutorials.org/networking/hacking-netcat-part-2-bind-reverse-shells/>`_
-has a nice illustration of the two concepts. The following two images stem from
-that website.
-
 We can use the tool ``netcat`` or ``nc`` to establish a connection between
 machines. It was originally a Unix tool, but is now also available on Windows,
 by default. ``nc`` is used here with different command line switches: ``-nvlp
@@ -32,11 +27,17 @@ connects to it.
 
 .. image:: Netcat-reverse-shell.jpg
 
+source: `hackingtutorials.org
+<https://www.hackingtutorials.org/networking/hacking-netcat-part-2-bind-reverse-shells/>`_
+
 Another type of shell is a **Bind Shell**, where the attacking machine
 established a connection to the target machine, which is listening for incoming
 traffic.
 
 .. image:: Netcat-bind-shell.jpg
+
+source: `hackingtutorials.org
+<https://www.hackingtutorials.org/networking/hacking-netcat-part-2-bind-reverse-shells/>`_
 
 A bind shell will typically be used in an external assessment, where
 we are using a virtual machine on our internal network, which makes it

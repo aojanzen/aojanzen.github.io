@@ -83,10 +83,7 @@
 <p>In this section, different ways of “popping a shell”, which means getting access
 to a terminal on a target machine, will be discussed. In particular, the
 differences between a <strong>Reverse Shell</strong> and a <strong>Bind Shell</strong> will be discussed.</p>
-<div id="more"> </div><p>The website <a class="reference external" href="https://www.hackingtutorials.org/networking/hacking-netcat-part-2-bind-reverse-shells/">hackingtutorials.org</a>
-has a nice illustration of the two concepts. The following two images stem from
-that website.</p>
-<p>We can use the tool <span class="docutils literal"><span class="pre">netcat</span></span> or <span class="docutils literal"><span class="pre">nc</span></span> to establish a connection between
+<div id="more"> </div><p>We can use the tool <span class="docutils literal"><span class="pre">netcat</span></span> or <span class="docutils literal"><span class="pre">nc</span></span> to establish a connection between
 machines. It was originally a Unix tool, but is now also available on Windows,
 by default. <span class="docutils literal"><span class="pre">nc</span></span> is used here with different command line switches: <span class="docutils literal"><span class="pre">-nvlp</span>
 <span class="pre">4444</span></span> means (n)umeric only, i.e. no name resolution, (v)erbose, (l)isten,
@@ -102,10 +99,12 @@ of the time. It is characterized by the target computer initiating the connectio
 to the attacker, i.e. the attacking machine is listening, and the target machine
 connects to it.</p>
 <img alt="../../../_images/Netcat-reverse-shell.jpg" src="../../../_images/Netcat-reverse-shell.jpg" />
+<p>source: <a class="reference external" href="https://www.hackingtutorials.org/networking/hacking-netcat-part-2-bind-reverse-shells/">hackingtutorials.org</a></p>
 <p>Another type of shell is a <strong>Bind Shell</strong>, where the attacking machine
 established a connection to the target machine, which is listening for incoming
 traffic.</p>
 <img alt="../../../_images/Netcat-bind-shell.jpg" src="../../../_images/Netcat-bind-shell.jpg" />
+<p>source: <a class="reference external" href="https://www.hackingtutorials.org/networking/hacking-netcat-part-2-bind-reverse-shells/">hackingtutorials.org</a></p>
 <p>A bind shell will typically be used in an external assessment, where
 we are using a virtual machine on our internal network, which makes it
 difficult to establish an incoming network connection from the target machine.
