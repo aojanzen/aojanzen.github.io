@@ -15,7 +15,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
         <meta name="viewport" content="width=device-width">
-        <title>Gathering Breached Credentials with Breach-Parse &mdash; From Noob to Hacker</title>
+        <title>Reverse Shell vs Bind Shell &mdash; From Noob to Hacker</title>
             <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
             <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
@@ -28,7 +28,7 @@
         <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
         <script src="../../../_static/plugins.js"></script>
         <script src="../../../_static/main.js"></script>
-        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Taking Notes" href="../28/takingnotes.html" /><link rel="prev" title="Hunting Breached Credentials with DeHashed" href="../30/huntingbreachedpasswordswithdehashed.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Researching Potential Vulnerabilities" href="../06/researchingpotentialvulnerabilities.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
         VERSION:     '1.7.2',
@@ -75,42 +75,50 @@
                 </li>
               </ul>
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
-            <span>May 29, 2022</span>
+            <span>June 08, 2022</span>
         </div>
-    <div class="section" id="gathering-breached-credentials-with-breach-parse">
-<h1>Gathering Breached Credentials with Breach-Parse</h1>
-<p>Finding user names and passwords in breached credentials is a very important
-step and part of every pentest.</p>
-<div id="more"> </div><p>TCM offers a bash script on his github page that can be used to filter a
-database with compromised user credentials for a specific domain name, e.g.
-<span class="docutils literal"><span class="pre">&#64;tesla.com</span></span>. The results of this filtering can then be used to log in to
-a target host.</p>
-<p>The database with breached credentials is more than 40 GB in size. It has to be
-downloaded from a torrent first, e.g. using <span class="docutils literal"><span class="pre">rtorrent</span></span>, which can be
-installed with <span class="docutils literal"><span class="pre">sudo</span> <span class="pre">apt-get</span> <span class="pre">install</span> <span class="pre">rtorrent</span></span> in Kali Linux. The torrent
-file is then downloaded with <span class="docutils literal"><span class="pre">rtorrent</span> <span class="pre">'&lt;torrent</span> <span class="pre">link&gt;'</span></span>.</p>
-<p>The breached credentials are stored in multiple folders, which are traversed
-and scanned for the host domain, e.g. <span class="docutils literal"><span class="pre">&#64;tesla.com</span></span>. The second command line
-parameter serves as the basis for the output file names. If the <span class="docutils literal"><span class="pre">breach-parse</span></span>
-git is not cloned into the <span class="docutils literal"><span class="pre">/opt</span></span> folder, you have to specify the location of
-the credentials as the third command line parameter.</p>
-<img alt="../../../_images/breach-parse_tesla.png" src="../../../_images/breach-parse_tesla.png" />
-<p>In my case, I have used an old external harddisk (still with a mini USB
-connector) to store the huge amount of data. Running the script once to extract
-the <span class="docutils literal"><span class="pre">&#64;tesla.com</span></span> credentials took about 45 minutes!</p>
-<p>The results are stored in three files: one with only the usernames, one with
-only the passwords and one with username/password pairs, where username and
-password are separated by a colon.</p>
-<p>The user credentials often stem from data breaches into services for which
-people used their company credentials as login credentials. TCM suggests to
-look for repeat offenders and to double-check the email address format against
-the format that has been identified in the email address hunting step. One can
-also look for similarities if several similar passwords show up for one email
-address. Perhaps the password has only been altered slightly, e.g. by changeing
-the capitalization. This kind of using known user names/email addresses and
-passwords is called <strong>credential stuffing</strong>. If this attempt is not successful,
-one can still try <strong>password spraying</strong>: trying arbitrary passwords against all
-user names in the search results.</p>
+    <div class="section" id="reverse-shell-vs-bind-shell">
+<h1>Reverse Shell vs Bind Shell</h1>
+<p>This is the first section of the “Exploitation Basics” chapter.</p>
+<p>In this section, different ways of “popping a shell”, which means getting access
+to a terminal on a target machine, will be discussed. In particular, the
+differences between a <strong>Reverse Shell</strong> and a <strong>Bind Shell</strong> will be discussed.</p>
+<div id="more"> </div><p>The website <a class="reference external" href="https://www.hackingtutorials.org/networking/hacking-netcat-part-2-bind-reverse-shells/">hackingtutorials.org</a>
+has a nice illustration of the two concepts. The following two images stem from
+that website.</p>
+<p>We can use the tool <span class="docutils literal"><span class="pre">netcat</span></span> or <span class="docutils literal"><span class="pre">nc</span></span> to establish a connection between
+machines. It was originally a Unix tool, but is now also available on Windows,
+by default. <span class="docutils literal"><span class="pre">nc</span></span> is used here with different command line switches: <span class="docutils literal"><span class="pre">-nvlp</span>
+<span class="pre">4444</span></span> means (n)umeric only, i.e. no name resolution, (v)erbose, (l)isten,
+(p)ort 4444. The p switch and the port number have to be in that sequence. The
+command <span class="docutils literal"><span class="pre">nc</span> <span class="pre">-lvnp</span> <span class="pre">4444</span></span> will thus make netcat listen for incoming connections
+on port 4444. To establish a connection, we use <span class="docutils literal"><span class="pre">nc</span> <span class="pre">&lt;IP</span> <span class="pre">address&gt;</span> <span class="pre">&lt;port&gt;</span></span>,
+e.g. <span class="docutils literal"><span class="pre">nc</span> <span class="pre">192.168.1.1</span> <span class="pre">4444</span></span>. The <span class="docutils literal"><span class="pre">-e</span></span> switch executes a program on the
+machine where <span class="docutils literal"><span class="pre">nc</span></span> is called with that switch, i.e. usually on the target
+machine where we want to get access to a shell, e.g. with <span class="docutils literal"><span class="pre">-e</span> <span class="pre">/bin/sh</span></span> in
+case of a Linux machine or <span class="docutils literal"><span class="pre">-e</span> <span class="pre">command.exe</span></span> on a Windows machine.</p>
+<p>The most common type of shell is a <strong>Reverse Shell</strong>. We will be using it 95%
+of the time. It is characterized by the target computer initiating the connection
+to the attacker, i.e. the attacking machine is listening, and the target machine
+connects to it.</p>
+<img alt="../../../_images/Netcat-reverse-shell.jpg" src="../../../_images/Netcat-reverse-shell.jpg" />
+<p>Another type of shell is a <strong>Bind Shell</strong>, where the attacking machine
+established a connection to the target machine, which is listening for incoming
+traffic.</p>
+<img alt="../../../_images/Netcat-bind-shell.jpg" src="../../../_images/Netcat-bind-shell.jpg" />
+<p>A bind shell will typically be used in an external assessment, where
+we are using a virtual machine on our internal network, which makes it
+difficult to establish an incoming network connection from the target machine.
+The decision between reverse and bind shell is usually made based on the ease
+of establishing the required network connection. For the PEH course as well as
+for internal pentesting, we will be using reverse shells.</p>
+<p>The following screenshot shows a bind shell established between my computer
+(<span class="docutils literal"><span class="pre">potti...</span></span>) as the attacker and a virtual machine running Kali Linux being
+the target:</p>
+<a class="reference internal image-reference" href="../../../_images/Reverse_shell.png"><img alt="../../../_images/Reverse_shell.png" src="../../../_images/Reverse_shell.png" style="width: 844.8px; height: 475.2px;" /></a>
+<p>When the host offering the shell is listening, we have established a bind
+shell. When the host offering the shell is establishing the connection, i.e.
+when it is using an IP address, we have a reverse shell.</p>
 </div>
 
     <div class="postmeta">
@@ -120,30 +128,30 @@ user names in the search results.</p>
         
         
         </div><ul class="related clearfix">
-            <li class="left"> &laquo; <a href="../30/huntingbreachedpasswordswithdehashed.html">Hunting Breached Credentials with DeHashed</a></li>
-            <li class="right"><a href="../28/takingnotes.html">Taking Notes</a> &raquo; </li>
+            <li class="left"></li>
+            <li class="right"><a href="../06/researchingpotentialvulnerabilities.html">Researching Potential Vulnerabilities</a> &raquo; </li>
         </ul></article><aside class="sidebar"><section><div class="widget">
     <h1>Aktuell</h1>
     <ul><li>
-            <a href="../../06/08/reverservsbindshell.html">Reverse Shell vs Bind Shell</a>
+            <a href="#">Reverse Shell vs Bind Shell</a>
         </li><li>
-            <a href="../../06/06/researchingpotentialvulnerabilities.html">Researching Potential Vulnerabilities</a>
+            <a href="../06/researchingpotentialvulnerabilities.html">Researching Potential Vulnerabilities</a>
         </li><li>
-            <a href="../../06/05/enumeratingsmb.html">Enumerating SMB</a>
+            <a href="../05/enumeratingsmb.html">Enumerating SMB</a>
         </li><li>
-            <a href="../../06/04/enumeratinghttpandhttps.html">Enumerating HTTP and HTTPS</a>
+            <a href="../04/enumeratinghttpandhttps.html">Enumerating HTTP and HTTPS</a>
         </li><li>
-            <a href="../../06/03/scanningwithnmap.html">Scanning with Nmap</a>
+            <a href="../03/scanningwithnmap.html">Scanning with Nmap</a>
         </li><li>
-            <a href="../../06/03/installingkioptrix.html">Installing Kioptrix</a>
+            <a href="../03/installingkioptrix.html">Installing Kioptrix</a>
         </li><li>
-            <a href="../../06/03/utilizingsocialmedia.html">Utilizing Social Media</a>
+            <a href="../03/utilizingsocialmedia.html">Utilizing Social Media</a>
         </li><li>
-            <a href="../../06/02/googlefu.html">Google Fu</a>
+            <a href="../02/googlefu.html">Google Fu</a>
         </li><li>
-            <a href="../../06/02/informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a>
+            <a href="../02/informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a>
         </li><li>
-            <a href="../../06/01/huntingsubdomains.html">Hunting Subdomains (Parts 1 and 2)</a>
+            <a href="../01/huntingsubdomains.html">Hunting Subdomains (Parts 1 and 2)</a>
         </li></ul>
 </div>
 </section><section><div class="widget" id="searchbox" role="search">
