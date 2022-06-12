@@ -4,6 +4,12 @@ Sitemap
 .. toctree::
    :maxdepth: 1
 
+   2022/06/12/bruteforceattacks
+   2022/06/11/manualexploitation
+   2022/06/10/gainingrootwithmetasploit
+   2022/06/09/stagedvsnon_stagedpayloads
+   2022/06/09/enumeratingssh
+   2022/06/09/scanningwithnessus
    2022/06/08/reverservsbindshell
    2022/06/06/researchingpotentialvulnerabilities
    2022/06/05/enumeratingsmb

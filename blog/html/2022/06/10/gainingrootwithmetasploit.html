@@ -1,0 +1,173 @@
+<!DOCTYPE html><!--[if lt IE 7]>      <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:og="http://ogp.me/ns#"
+    xmlns:fb="https://www.facebook.com/2008/fbml" class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="description" content="Hacking how-to for beginners, learnings from CTFs, note for myself">
+        <meta name="viewport" content="width=device-width">
+        <title>Gaining Root with Metasploit &mdash; From Noob to Hacker</title>
+            <link rel="stylesheet" href="../../../_static/normalize.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/sphinx.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/main.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/flat.css" type="text/css">
+            <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+            <link rel="stylesheet" href="../../../_static/font-awesome.min.css" type="text/css">
+        <link rel="shortcut icon" href="../../../_static/tinkerer.ico" /><!-- Load modernizr and JQuery -->
+        <script src="../../../_static/vendor/modernizr-2.6.2.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="../../../_static/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="../../../_static/plugins.js"></script>
+        <script src="../../../_static/main.js"></script>
+        <link rel="search" title="Search" href="../../../search.html" /><link rel="next" title="Staged vs Non-Staged Payloads" href="../09/stagedvsnon_stagedpayloads.html" /><link rel="prev" title="Manual Exploitation" href="../11/manualexploitation.html" /><link rel="alternate" type="application/rss+xml" title="RSS" href="../../../rss.html" /><script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.7.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        SOURCELINK_SUFFIX: '.txt',
+        HAS_SOURCE:  true
+      };
+    </script><script type="text/javascript" src="../../../_static/underscore.js"></script><script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Scroll to content if on small screen
+            if (screen.width < 480)
+            {
+                $(document).scrollTop(document.getElementsByTagName("article")[0].offsetTop - 44);
+            }
+        });
+    </script></head>
+    <body role="document">
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+      <div id="container"><header role="banner">
+            <hgroup>
+              <h1><a href="../../../index.html">From Noob to Hacker</a></h1><h2>Things I have learned along the way</h2></hgroup>
+          </header>
+      <nav role="navigation">
+            <ul><li class="main-nav">
+                  <a href="../../../index.html">Home</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/about.html">About</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/ctf_writeups.html">CTF Writeups</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/linux_and_tools.html">Linux and Tools</a>
+                </li>
+              <li class="main-nav">
+                  <a href="../../../pages/hacking.html">Hacking and Networks</a>
+                </li>
+              </ul>
+          </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article><div class="timestamp postmeta">
+            <span>June 10, 2022</span>
+        </div>
+    <div class="section" id="gaining-root-with-metasploit">
+<h1>Gaining Root with Metasploit</h1>
+<p>This is the culmination point of the previous lessons of PEH, the first popped
+shell, using <span class="docutils literal"><span class="pre">MetaSploit</span></span> on the Samba 2.2.1a vulnerability on port 139
+(“trans2open”, remote buffer overflow).</p>
+<div id="more"> </div><p>We can use <span class="docutils literal"><span class="pre">searchsploit</span></span> again to get an overview of the exploits that are
+available in <span class="docutils literal"><span class="pre">MetaSploit</span></span> with <span class="docutils literal"><span class="pre">searchsploit</span> <span class="pre">samba</span> <span class="pre">2.2</span></span>. After we have
+launched the <span class="docutils literal"><span class="pre">MetaSploit</span></span> console with <span class="docutils literal"><span class="pre">msfconsole</span></span> we can enter <span class="docutils literal"><span class="pre">search</span>
+<span class="pre">trans2open</span></span> and pick the exploit for <span class="docutils literal"><span class="pre">Linux</span> <span class="pre">x86</span></span> since we already know from
+the enumeration phase the our target machine, Kioptrix, runs on RedHat Linux.
+With <span class="docutils literal"><span class="pre">use</span> <span class="pre">1</span></span> we pick the Linux exploit, which still needs some configuration.</p>
+<a class="reference internal image-reference" href="../../../_images/Metasploit_trans2open_1.png"><img alt="../../../_images/Metasploit_trans2open_1.png" src="../../../_images/Metasploit_trans2open_1.png" style="width: 829.9200000000001px; height: 272.09000000000003px;" /></a>
+<p>First, we check which options are available by entering <span class="docutils literal"><span class="pre">options</span></span>. The option
+<span class="docutils literal"><span class="pre">RPORT</span></span> is already set to the correct port for SMB, 139, but we still need to
+set the <span class="docutils literal"><span class="pre">RHOSTS</span></span> address range to the desired value, i.e. the IP address of
+our target machine (here: 192.168.156.132). Once that is done, we can enter
+<span class="docutils literal"><span class="pre">options</span></span> once more to check that the <span class="docutils literal"><span class="pre">RHOSTS</span></span> value has indeed been set to
+the correct value. Sometimes we also have to pick a target, therefore we should
+also enter <span class="docutils literal"><span class="pre">show</span> <span class="pre">targets</span></span> to check whether there are several options to pick
+from. This is not the case here.</p>
+<p>To run the chosen exploit, we can enter either <span class="docutils literal"><span class="pre">run</span></span> or <span class="docutils literal"><span class="pre">exploit</span></span>.</p>
+<a class="reference internal image-reference" href="../../../_images/Metasploit_trans2open_2.png"><img alt="../../../_images/Metasploit_trans2open_2.png" src="../../../_images/Metasploit_trans2open_2.png" style="width: 833.9399999999999px; height: 469.85999999999996px;" /></a>
+<p>It turns out that the exploit does not get us a shell. Instead, after a few
+attempts with different memory addresses have been made, the exploit is
+transferred to the target machine, but then the session is closed again because
+the connection died.</p>
+<a class="reference internal image-reference" href="../../../_images/Metasploit_trans2open_3.png"><img alt="../../../_images/Metasploit_trans2open_3.png" src="../../../_images/Metasploit_trans2open_3.png" style="width: 519.3000000000001px; height: 413.1px;" /></a>
+<p>If we look at the options again, we find that the name of the payload option,
+<span class="docutils literal"><span class="pre">linux/x86/meterpreter/reverse_tcp</span></span>, suggests that this is a staged payload.
+The <span class="docutils literal"><span class="pre">LHOST</span></span> and <span class="docutils literal"><span class="pre">LPORT</span></span> variables are the listening IP address and port
+number on our attacking machine. Port 4444 is a default <span class="docutils literal"><span class="pre">Meterpreter</span></span> port,
+that will easily be detected by IDS or antivirus software and can thus easily
+trigger an alarm.</p>
+<a class="reference internal image-reference" href="../../../_images/Metasploit_trans2open_4.png"><img alt="../../../_images/Metasploit_trans2open_4.png" src="../../../_images/Metasploit_trans2open_4.png" style="width: 833.9399999999999px; height: 322.26px;" /></a>
+<p>We can pick a new payload by typing <span class="docutils literal"><span class="pre">set</span> <span class="pre">payload</span> <span class="pre">linux</span></span> and then pressing the
+TAB key once (result: <span class="docutils literal"><span class="pre">/x86/</span></span> is added to the path) and then hitting the TAB
+key twice, which lists up all available payloads starting with <span class="docutils literal"><span class="pre">linux/x86/</span></span>.
+We pick one of the payloads that are not staged, i.e. which have only one more
+level after the <span class="docutils literal"><span class="pre">x86</span></span>: <span class="docutils literal"><span class="pre">shell_reverse_tcp</span></span>. We can enter <span class="docutils literal"><span class="pre">options</span></span> again
+to verify that the payload has been set correctly and then <span class="docutils literal"><span class="pre">run</span></span> it.</p>
+<a class="reference internal image-reference" href="../../../_images/Metasploit_trans2open_5.png"><img alt="../../../_images/Metasploit_trans2open_5.png" src="../../../_images/Metasploit_trans2open_5.png" style="width: 829.01px; height: 332.15000000000003px;" /></a>
+<p>This time the exploit worked, and we popped a shell! We are now <span class="docutils literal"><span class="pre">root</span></span> on the
+target machine and own the machine.</p>
+</div>
+
+    <div class="postmeta">
+        <div class="author">
+            <span>Von Andreas Janzen</span>
+        </div>
+        
+        
+        </div><ul class="related clearfix">
+            <li class="left"> &laquo; <a href="../11/manualexploitation.html">Manual Exploitation</a></li>
+            <li class="right"><a href="../09/stagedvsnon_stagedpayloads.html">Staged vs Non-Staged Payloads</a> &raquo; </li>
+        </ul></article><aside class="sidebar"><section><div class="widget">
+    <h1>Aktuell</h1>
+    <ul><li>
+            <a href="../12/bruteforceattacks.html">Brute Force Attacks</a>
+        </li><li>
+            <a href="../11/manualexploitation.html">Manual Exploitation</a>
+        </li><li>
+            <a href="#">Gaining Root with Metasploit</a>
+        </li><li>
+            <a href="../09/stagedvsnon_stagedpayloads.html">Staged vs Non-Staged Payloads</a>
+        </li><li>
+            <a href="../09/enumeratingssh.html">Enumerating SSH</a>
+        </li><li>
+            <a href="../09/scanningwithnessus.html">Scanning with Nessus</a>
+        </li><li>
+            <a href="../08/reverservsbindshell.html">Reverse Shell vs Bind Shell</a>
+        </li><li>
+            <a href="../06/researchingpotentialvulnerabilities.html">Researching Potential Vulnerabilities</a>
+        </li><li>
+            <a href="../05/enumeratingsmb.html">Enumerating SMB</a>
+        </li><li>
+            <a href="../04/enumeratinghttpandhttps.html">Enumerating HTTP and HTTPS</a>
+        </li></ul>
+</div>
+</section><section><div class="widget" id="searchbox" role="search">
+    <h1><a href="#searchbox">Search</a></h1>
+    <form action="../../../search.html" method="get">
+        <input type="text" name="q" />
+        <button type="submit"><span class="fa fa-search"></span></button>
+    </form>
+</div></section></aside></div> <!-- #main --></div> <!-- #main-container -->
+
+        <div class="footer-container" role="contentinfo"><footer class="wrapper">&copy; Copyright 2022, Andreas Janzen. Powered by <a href="http://www.tinkerer.me/">Tinkerer</a> and <a href="http://sphinx.pocoo.org/">Sphinx</a>.</footer></div> <!-- footer-container -->
+
+      </div> <!--! end of #container --><!--[if lt IE 7 ]>
+          <script src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script>
+          <script>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})</script>
+        <![endif]-->
+    </body>
+</html>
