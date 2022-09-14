@@ -77,51 +77,97 @@
           </nav><div class="main-container" role="main"><div class="main wrapper body clearfix"><article>
     <div class="section" id="hacking-and-networks">
 <h1>Hacking and Networks</h1>
-<div class="section" id="hacking">
-<h2>Hacking</h2>
-<p><a class="reference external" href="https://tcm-sec.com/so-you-want-to-be-a-hacker-2021-edition">https://tcm-sec.com/so-you-want-to-be-a-hacker-2021-edition</a></p>
-<p><strong>SQL Injection</strong></p>
-<p><a class="reference external" href="https://www.geeksforgeeks.org/authentication-bypass-using-sql-injection-on-login-page/">https://www.geeksforgeeks.org/authentication-bypass-using-sql-injection-on-login-page/</a></p>
-<p><a class="reference external" href="https://www.hackingarticles.in/beginner-guide-sql-injection-part-1/">https://www.hackingarticles.in/beginner-guide-sql-injection-part-1/</a></p>
-<p><a class="reference external" href="https://www.tutorialspoint.com/sqlite/sqlite_injection.htm">https://www.tutorialspoint.com/sqlite/sqlite_injection.htm</a></p>
-<p><a class="reference external" href="https://www.ptsecurity.com/ww-en/analytics/knowledge-base/how-to-prevent-sql-injection-attacks/">https://www.ptsecurity.com/ww-en/analytics/knowledge-base/how-to-prevent-sql-injection-attacks/</a></p>
-<p><a class="reference external" href="https://www.exploit-db.com/papers/17934">https://www.exploit-db.com/papers/17934</a></p>
-<p><a class="reference external" href="https://portswigger.net/web-security/reference/obfuscating-attacks-using-encodings">https://portswigger.net/web-security/reference/obfuscating-attacks-using-encodings</a></p>
-<p><a class="reference external" href="https://websec.ca/kb/sql_injection">https://websec.ca/kb/sql_injection</a></p>
-<p><a class="reference external" href="https://bobby-tables.com/">https://bobby-tables.com/</a></p>
-<p><strong>Reverse Engineering</strong></p>
-<p><a class="reference external" href="https://www.codementor.io/&#64;packt/reverse-engineering-a-linux-executable-hello-world-rjceryk5d">https://www.codementor.io/&#64;packt/reverse-engineering-a-linux-executable-hello-world-rjceryk5d</a></p>
-<p><strong>Python Vulnerabilities</strong></p>
-<p><a class="reference external" href="https://www.geeksforgeeks.org/vulnerability-input-function-python-2-x/">https://www.geeksforgeeks.org/vulnerability-input-function-python-2-x/</a></p>
-<p><a class="reference external" href="https://intx0x80.blogspot.com/2017/05/python-input-vulnerability_25.html">https://intx0x80.blogspot.com/2017/05/python-input-vulnerability_25.html</a></p>
-<p><a class="reference external" href="https://medium.com/swlh/hacking-python-applications-5d4cd541b3f1">https://medium.com/swlh/hacking-python-applications-5d4cd541b3f1</a></p>
-<p><a class="reference external" href="https://itnext.io/common-python-security-problems-ffedbae7b11c">https://itnext.io/common-python-security-problems-ffedbae7b11c</a></p>
-</div>
-<div class="section" id="computer-networks">
-<h2>Computer Networks</h2>
-<p><strong>TCM Security, Network refresher:</strong></p>
+<div class="section" id="practical-ethical-hacking">
+<h2>Practical Ethical Hacking</h2>
+<p>The following blog posts are notes that I have taken while I was working
+through
+<a class="reference external" href="https://tcm-sec.com/so-you-want-to-be-a-hacker-2021-edition">TCM Sec Academy’s</a>
+“Practical Ethical Hacking” course. The list has the same struture as the course,
+but the notes reflect my own preferences. I have left out or shortened stuff
+that I knew already, and I may add additional information from other sources
+over time. Just reading my notes is surely no substitute for taking the course.</p>
+<p>The first half of the course is available free of charge on
+<a class="reference external" href="https://www.youtube.com/watch?v=OghyFX9YMi8&amp;list=PLtsY6_AbwdOR9EhsVR1zSnzXNr1dlnPMK">youtube</a>.</p>
+<p><strong>Notekeeping</strong></p>
 <ul class="simple">
-<li>IP addresses: ifconfig (inet vs inet6 addresses for IP V4 [decimal notation,
-4 bytes/32 bits] and IP V6 [hexadecimal notation, 128 bits]), we are running
-out of IP V4 addresses, but NAT (Network Address Translation) helps to find
-an IP address for each computer through use of private IP addresses
-(class C: 192.168.x.x., class A: 10.x.x.x., class B:
-172.16.x.x…172.31.0.0), IP routing is on layer 3 of the OSI model</li>
-<li>MAC address (Media Access Control): 6 bytes, network interface cards and
-switches communicate on layer 2 via MAC addresses; first 3 bytes identify
-network card manufacturer (ifconfig: Hardware address, manufacturer can be
-identified online)</li>
-<li>Transport layer (OSI layer 4): TCP, transmission control protocol, connection
-oriented for reliability; UDP: user datagram protocol, connectionless protocol
-for fast connection with less emphasis on reliability; TCP is scanned more
-often (SYNi &gt; SYN-ACK &gt; ACK); ports: http (port 80), https (port 443);
-example: use wireshark to capture 3-way handshake</li>
-<li>Common ports and protocols via TCP: port 21 FTP, port 22 SSH (encrypted),
-port 23 Telnet, port 25 SMTP, port 53 DNS (resolving names to ip addresses),
-port 80 HTTP, port 443 HTTPS (encrypted), port 110 POP3, port 143 IMAP and –
-most often used when scanning – ports 139 and 445 SMB (Windows file shares);
-protocols via UDP: port 53 DNS, ports 67/68 DHCP, port 69 TFTP (trivial FTP),
-port 161 SNMP</li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/28/takingnotes.html">Taking Notes</a></li>
+</ul>
+<p><strong>Networking Refresher</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/21/networkingrefresher.html">Networking Refresher</a></li>
+</ul>
+<p><strong>Introduction to Linux</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/22/introductiontolinux.html">Introduction to Linux</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/25/scriptingwithbash.html">Scripting with bash</a></li>
+</ul>
+<p><strong>Introduction to Python</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/28/introductionpython.html">Introduction to Python</a></li>
+</ul>
+<p><strong>The Hacker Methodology</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/28/fivestagesofethicalhacking.html">The Five Stages of Ethical Hacking</a></li>
+</ul>
+<p><strong>Information Gathering (Reconnaissance)</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/28/passivereconnaissanceoverview.html">An Overview of Passive Recon(naissance)</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/28/identifyingourtarget.html">Identifying Our Target</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/28/discoveringemailadresses.html">Discovering Email Adresses</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/29/gatheringbreachedcredentials.html">Gathering Breached Credentials with Breach-Parse</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/05/30/huntingbreachedpasswordswithdehashed.html">Hunting Breached Credentials with DeHashed</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/01/huntingsubdomains.html">Hunting Subdomains (Parts 1 and 2)</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/01/identifyingwebsitetechnologies.html">Identifying Website Technologies</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/02/informationgatheringwithburpsuite.html">Information Gathering with Burp Suite</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/02/googlefu.html">Google Fu</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/03/utilizingsocialmedia.html">Utilizing Social Media</a></li>
+</ul>
+<p><strong>Scanning &amp; Enumeration</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/03/installingkioptrix.html">Installing Kioptrix</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/03/scanningwithnmap.html">Scanning with Nmap</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/04/enumeratinghttpandhttps.html">Enumerating HTTP and HTTPS</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/05/enumeratingsmb.html">Enumerating SMB</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/09/enumeratingssh.html">Enumerating SSH</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/06/researchingpotentialvulnerabilities.html">Researching Potential Vulnerabilities</a></li>
+</ul>
+<p><strong>Vulnerability Scanning with Nessus</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/09/scanningwithnessus.html">Scanning with Nessus</a></li>
+</ul>
+<p><strong>Exploitation Basics</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/08/reverservsbindshell.html">Reverse Shell vs Bind Shell</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/09/stagedvsnon_stagedpayloads.html">Staged vs Non-Staged Payloads</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/10/gainingrootwithmetasploit.html">Gaining Root with Metasploit</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/11/manualexploitation.html">Manual Exploitation</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/12/bruteforceattacks.html">Brute Force Attacks</a></li>
+<li><a class="reference external" href="https://aojanzen.github.io/blog/html/2022/06/15/credentialstuffingandpasswordspraying.html">Credential Stuffing and Password Spraying</a></li>
+</ul>
+</div>
+<div class="section" id="other">
+<h2>Other</h2>
+<p><strong>SQL Injection</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.geeksforgeeks.org/authentication-bypass-using-sql-injection-on-login-page/">https://www.geeksforgeeks.org/authentication-bypass-using-sql-injection-on-login-page/</a></li>
+<li><a class="reference external" href="https://www.hackingarticles.in/beginner-guide-sql-injection-part-1/">https://www.hackingarticles.in/beginner-guide-sql-injection-part-1/</a></li>
+<li><a class="reference external" href="https://www.tutorialspoint.com/sqlite/sqlite_injection.htm">https://www.tutorialspoint.com/sqlite/sqlite_injection.htm</a></li>
+<li><a class="reference external" href="https://www.ptsecurity.com/ww-en/analytics/knowledge-base/how-to-prevent-sql-injection-attacks/">https://www.ptsecurity.com/ww-en/analytics/knowledge-base/how-to-prevent-sql-injection-attacks/</a></li>
+<li><a class="reference external" href="https://www.exploit-db.com/papers/17934">https://www.exploit-db.com/papers/17934</a></li>
+<li><a class="reference external" href="https://portswigger.net/web-security/reference/obfuscating-attacks-using-encodings">https://portswigger.net/web-security/reference/obfuscating-attacks-using-encodings</a></li>
+<li><a class="reference external" href="https://websec.ca/kb/sql_injection">https://websec.ca/kb/sql_injection</a></li>
+<li><a class="reference external" href="https://bobby-tables.com/">https://bobby-tables.com/</a></li>
+</ul>
+<p><strong>Reverse Engineering</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.codementor.io/&#64;packt/reverse-engineering-a-linux-executable-hello-world-rjceryk5d">https://www.codementor.io/&#64;packt/reverse-engineering-a-linux-executable-hello-world-rjceryk5d</a></li>
+</ul>
+<p><strong>Python Vulnerabilities</strong></p>
+<ul class="simple">
+<li><a class="reference external" href="https://www.geeksforgeeks.org/vulnerability-input-function-python-2-x/">https://www.geeksforgeeks.org/vulnerability-input-function-python-2-x/</a></li>
+<li><a class="reference external" href="https://intx0x80.blogspot.com/2017/05/python-input-vulnerability_25.html">https://intx0x80.blogspot.com/2017/05/python-input-vulnerability_25.html</a></li>
+<li><a class="reference external" href="https://medium.com/swlh/hacking-python-applications-5d4cd541b3f1">https://medium.com/swlh/hacking-python-applications-5d4cd541b3f1</a></li>
+<li><a class="reference external" href="https://itnext.io/common-python-security-problems-ffedbae7b11c">https://itnext.io/common-python-security-problems-ffedbae7b11c</a></li>
 </ul>
 </div>
 </div>
